@@ -15,12 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
 from main_app import views
 from django.views.generic import TemplateView
+
+# from .googleviews import GoogleOAuth2AdapterIdToken # import custom adapter
+# from rest_auth.registration.views import SocialLoginView
+# from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+# class GoogleLogin(SocialLoginView):
+#     adapter_class = GoogleOAuth2AdapterIdToken
+#     client_class = OAuth2Client
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('main_app.urls')),
+    # path('rest-auth/google/', GoogleLogin.as_view()),
     path('', TemplateView.as_view(template_name='index.html')),
 ]

@@ -10,6 +10,8 @@ djangorestframework = "*"
 django-cors-headers = "*"
 whitenoise = "*"
 gunicorn = "*"
+django-allauth = "*"
+django-rest-auth = {extras = ["with_social"], version = "*"}
 
 [requires]
 python_version = "3.8"
