@@ -1,7 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { logInAPI, logOutAPI } from '../../redux/action-creators'
 
 
-const Homepage = ()=>{
+const Homepage = ({ logInAPI, logOutAPI, loggedIn })=>{
 
     function onSubmitHandler(event){
         event.preventDefault()
@@ -15,6 +17,8 @@ const Homepage = ()=>{
             },
             body: JSON.stringify({
                 email: event.target.Email.value,
+                first_name: event.target.FirstName.value,
+                last_name: event.target.LastName.value,
                 username: event.target.Username.value,
                 password1: event.target.Password1.value,
                 password2: event.target.Password2.value
@@ -40,47 +44,20 @@ const Homepage = ()=>{
 
     const onLoginHandler = (event) => {
         event.preventDefault()
-        let logInURL = "/api/rest-auth/login/"
+
         let requestBody = {
             email: event.target.Email.value,
-            username: event.target.Username.value,
             password: event.target.Password.value
         }
 
-        fetch(logInURL, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(requestBody)
-        })
-        .then(res=>{
-            if(res.status!==200){
-                console.log(res.statusText, res.status, res)
-            } else {
-                console.log("logged in")
-            }
-        })
+        logInAPI(requestBody)
+        console.log(loggedIn)
+
     }
 
     const logout = () => {
-        let logoutURL = "/api/rest-auth/logout/"
-        fetch(logoutURL, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res=>{
-                console.log("Logged out")
-
-            })
-            .catch(err=>{
-                console.log("logout error.")
-            })
-
+        logOutAPI()
+        console.log(loggedIn)
     }
 
 
@@ -91,6 +68,10 @@ const Homepage = ()=>{
                     <form onSubmit={onSubmitHandler}>
                         Email:
                         <input type="text" name="Email"/>
+                        First Name:
+                        <input type="text" name="FirstName"/>
+                        Last Name:
+                        <input type="text" name="LastName"/>
                         Username:
                         <input type="text" name="Username"/>
                         Password:
@@ -106,8 +87,6 @@ const Homepage = ()=>{
                     <form onSubmit={onLoginHandler}>
                         Email:
                         <input type="text" name="Email"/>
-                        Username:
-                        <input type="text" name="Username"/>
                         Password:
                         <input type="text" name="Password"/>
                         <input type="submit" />
@@ -120,4 +99,9 @@ const Homepage = ()=>{
             </div>)
 }
 
-export default Homepage
+const mapStateToProps = (state)=>({
+    loggedIn: state.actions.loggedIn
+})
+
+
+export default connect(mapStateToProps, { logInAPI, logOutAPI })(Homepage)
