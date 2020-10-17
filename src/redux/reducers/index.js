@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
-import actions from "./actions"
+import authActions from "./authActions"
+import appActions from "./appActions"
 
 
 export default combineReducers({
-    actions
+    authActions,
+    appActions
 })

@@ -1,4 +1,5 @@
-import { logIn, logOut } from '../actions'
+import { logIn, logOut, getGroups } from '../actions'
+import Cookies from 'js-cookie'
 
 export const logInAPI = (requestBody) => {
 
@@ -6,7 +7,7 @@ export const logInAPI = (requestBody) => {
         try {
 
             let logInURL = "/api/rest-auth/login/"
-
+            //log in
             let logInReq = await fetch(logInURL, {
                     method: "POST",
                     headers: {
@@ -16,7 +17,8 @@ export const logInAPI = (requestBody) => {
                     body: JSON.stringify(requestBody)
                 })
 
-                if(logInReq.status==200){
+                if(logInReq.status===200){
+                    //set jwt
                     dispatch(logIn())
                     console.log("logged in")
                 } else {
@@ -36,12 +38,13 @@ export const logInAPI = (requestBody) => {
 export const logOutAPI = () => {
     return async(dispatch)=>{
         try {
-            let logoutURL = "/api/rest-auth/logout/"
+            let logoutURL = "/api/test/logout/"
             fetch(logoutURL, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': Cookies.get('csrftoken')
                 }
             })
                 .then(res=>{
@@ -58,4 +61,39 @@ export const logOutAPI = () => {
         }
     }
 
+}
+
+export const getUserGroups = () => {
+    return async (dispatch) => {
+        try {
+
+            let groupsURL = "/api/groups/"
+            let userGroupReq = await fetch(groupsURL)
+                                .then(res => {
+                                    return res.json()
+                                })
+            dispatch(getGroups(userGroupReq))
+
+
+
+        } catch (err) {
+            console.log(err, "Error in getting user groups")
+        }
+    }
+}
+
+
+export const openAppValidate = () => {
+    return async (dispatch) => {
+        let validateURL = "/api/on-app-open-validate"
+        let validity = await fetch(validateURL)
+            .then(res => res.text())
+
+        if(validity==="true"){
+            dispatch(logIn())
+            getUserGroups()(dispatch)
+        } else {
+            return
+        }
+    }
 }

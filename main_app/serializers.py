@@ -10,10 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class WorkGroupSerializer(serializers.ModelSerializer):
-	members = UserSerializer(many=True)
+	members = UserSerializer(read_only=True, many=True)
+	admins = UserSerializer(read_only=True, many=True)
 	class Meta:
 		model = WorkGroup
-		fields = '__all__'
+		fields = ('name', 'admins', 'members')
 
 class PeriodSerializer(serializers.ModelSerializer):
 	class Meta:

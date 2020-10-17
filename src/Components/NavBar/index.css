@@ -1,0 +1,28 @@
+.nav-bar {
+	width: 100%;
+	height: 30px;
+	background-color: lightgray;
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	padding: 5px 0;
+}
+
+.nav-bar > * {
+	margin: 0 10px;
+}
+
+.nav-logged-in {
+	justify-content: space-between;
+
+}
+
+.nav-logged-out {
+	justify-content: flex-end;
+}
+
+.logout {
+	cursor: pointer;
+}

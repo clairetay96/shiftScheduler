@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 
 class WorkGroup(models.Model):
 	name = models.CharField(max_length=140)
-	admins = models.TextField(default="1")
-	members = models.ManyToManyField(User)
+	admins = models.ManyToManyField(User, related_name="admins")
+	members = models.ManyToManyField(User, related_name="members")
 
 	def __str__(self):
 		return self.name

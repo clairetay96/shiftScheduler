@@ -1,4 +1,4 @@
-const actions = (
+const authActions = (
     state = {
         loggedIn: false
     },
@@ -6,7 +6,6 @@ const actions = (
     ) => {
     switch (action.type){
         case "LOG_IN":
-            console.log("in log in action type")
             return {...state, loggedIn: true}
         case "LOG_OUT":
             return {...state, loggedIn: false}
@@ -21,4 +20,4 @@ const actions = (
 
 
 
-export default actions
+export default authActions

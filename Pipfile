@@ -12,6 +12,7 @@ whitenoise = "*"
 gunicorn = "*"
 django-allauth = "*"
 django-rest-auth = {extras = ["with_social"], version = "*"}
+djangorestframework-jwt = "*"
 
 [requires]
 python_version = "3.8"

@@ -60,10 +60,11 @@ SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
 	'google': {}
 }
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+REST_USE_JWT = True
 
 MIDDLEWARE = [
 		'corsheaders.middleware.CorsMiddleware',
@@ -102,8 +103,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 REST_FRAMEWORK = {
+	'DEFAULT_PERMISSION_CLASSES': (
+		'rest_framework.permissions.IsAuthenticated',
+		),
 	'DEFAULT_AUTHENTICATION_CLASSES': [
-	'rest_framework.authentication.TokenAuthentication',]
+	'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+	'rest_framework.authentication.SessionAuthentication',
+	'rest_framework.authentication.BasicAuthentication',
+	'rest_framework.authentication.TokenAuthentication',],
 }
 
 # Database
