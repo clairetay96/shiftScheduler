@@ -1,57 +1,42 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import SingleGroup from '../SingleGroup'
+import AddGroup from '../../Components/AddGroup'
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-import Cookies from 'js-cookie'
+
 
 import { getUserGroups } from '../../redux/action-creators'
 
 
-function Groups({ loggedIn, userGroups, getUserGroups}){
 
+function Groups({ loggedIn, userGroups, getUserGroups }){
+
+    //modal functionality - show vs hide
+    let [show, setShow] = useState(false)
+
+    const hideAddGroup = () => {
+        setShow(false)
+    }
+
+    const showAddGroup = () => {
+        setShow(true)
+    }
+
+    //if userGroups in redux store is not populated, fetch group data on component load.
     useEffect(()=>{
         if (userGroups.length===0){
             getUserGroups()
         }
-
     }, [])
 
-    //make a new group
-    function makeNewGroup(event) {
-        event.preventDefault()
 
-        let URL = "/api/groups/"
-        let requestBody = {
-            name: event.target.groupName.value,
-            members: [event.target.member.value]
-        }
-
-        fetch(URL, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                'X-CSRFToken': Cookies.get('csrftoken')
-             },
-            body: JSON.stringify(requestBody)
-        })
-            .then(res=>res.json())
-            .then(res=>console.log(res))
-            .catch(err=>console.log("help"))
-    }
 
 
     return (<div>
-
                 <Switch>
-                    <Route path="/groups/new/">
-                        <form onSubmit={makeNewGroup}>
-                            Make a New Group!
-                            Name: <input type="text" name="groupName" />
-                            Members: <input type="integer" name="member"/>
-                            <input type="submit" />
 
-                        </form>
+                    <Route path={`/groups/:id/periods/new`}>
+                        New Periods
                     </Route>
 
                     <Route path="/groups/:id">
@@ -59,14 +44,17 @@ function Groups({ loggedIn, userGroups, getUserGroups}){
                     </Route>
 
                     <Route path="/groups/">
-                        This is groups
-                        <div><Link to="/groups/new/">Add a new group</Link></div>
-                        {userGroups.map((item, index)=>{
-                            return <div key={index}>{item.name}</div>
+                        <h3>Your Groups</h3>
+
+                        <AddGroup show={show} hideAddGroup={hideAddGroup}/>
+                        <div onClick={showAddGroup}>Add a new group</div>
+
+                        {Object.values(userGroups).map((item, index)=>{
+                            return <div key={index}><Link to={"/groups/"+item.id}>{item.name}</Link></div>
                         })}
                     </Route>
-                </Switch>
 
+                </Switch>
             </div>)
 }
 

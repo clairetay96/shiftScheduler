@@ -1,45 +1,25 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { signUpAPI } from '../../redux/action-creators'
 
 
-const SignUpPage = ({ loggedIn }) => {
+const SignUpPage = ({ loggedIn, signUpAPI }) => {
     let history = useHistory()
 
     function onSubmitHandler(event){
         event.preventDefault()
-        let signUpURL = "/api/rest-auth/registration/"
-
-        fetch(signUpURL, {
-            method:"POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        let requestBody = {
                 email: event.target.Email.value,
-                first_name: event.target.FirstName.value,
-                last_name: event.target.LastName.value,
                 username: event.target.Username.value,
                 password1: event.target.Password1.value,
                 password2: event.target.Password2.value
-            })
+            }
 
-        })
+        signUpAPI(requestBody)
             .then(res => {
-                if(res.status!==200){
-                    return res
-                } else {
-                    console.log("All good")
-                    return null
-                }
+                history.push("/")
             })
-            .then(res => {
-                if(res!==null){
-                    console.log(res.statusText, res)
-                }
-            })
-            .catch(err => console.log(err.message))
 
     }
 
@@ -50,10 +30,6 @@ const SignUpPage = ({ loggedIn }) => {
                     <form onSubmit={onSubmitHandler}>
                         Email:
                         <input type="text" name="Email"/>
-                        First Name:
-                        <input type="text" name="FirstName"/>
-                        Last Name:
-                        <input type="text" name="LastName"/>
                         Username:
                         <input type="text" name="Username"/>
                         Password:
@@ -71,4 +47,4 @@ const mapStateToProps = (state)=>({
     loggedIn: state.authActions.loggedIn
 })
 
-export default connect(mapStateToProps)(SignUpPage)
+export default connect(mapStateToProps, {signUpAPI})(SignUpPage)

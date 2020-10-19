@@ -1,4 +1,4 @@
-import { logIn, logOut, getGroups } from '../actions'
+import { logIn, logOut, getGroups, createGroup, updateGroupDispatch } from '../actions'
 import Cookies from 'js-cookie'
 
 export const logInAPI = (requestBody) => {
@@ -28,11 +28,7 @@ export const logInAPI = (requestBody) => {
         } catch (err) {
             console.log(err, "error in logInAPI")
         }
-
-
     }
-
-
 }
 
 export const logOutAPI = () => {
@@ -63,14 +59,56 @@ export const logOutAPI = () => {
 
 }
 
+export const signUpAPI = (requestBody) => {
+    return async (dispatch) => {
+        try {
+            let signUpURL = "/api/rest-auth/registration/"
+            fetch(signUpURL, {
+                method:"POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(res => {
+                    if(res.status!==201){
+                        return res
+                    } else {
+                        console.log("All good")
+                        dispatch(logIn())
+                        return null
+                    }
+                })
+                .then(res => {
+                    if(res!==null){
+                        console.log(res.statusText, res)
+                    }
+                })
+                .catch(err => console.log(err.message))
+
+        } catch (err) {
+            console.log(err, "Err in signUpAPI")
+        }
+    }
+}
+
 export const getUserGroups = () => {
     return async (dispatch) => {
         try {
 
             let groupsURL = "/api/groups/"
             let userGroupReq = await fetch(groupsURL)
+                                .then(res => res.json())
                                 .then(res => {
-                                    return res.json()
+
+                                    let groupsListObj = {}
+
+                                    //convert list of returned groups into an object where the key is the id
+                                    for(let i=0;i < res.length; i++){
+                                        groupsListObj[res[i].id] = res[i]
+                                    }
+                                    return groupsListObj
                                 })
             dispatch(getGroups(userGroupReq))
 
@@ -96,4 +134,80 @@ export const openAppValidate = () => {
             return
         }
     }
+}
+
+export const createNewGroup = (token, requestBody) => {
+    return async (dispatch) => {
+
+        try {
+            let newGroupURL = "/api/groups/"
+
+            fetch(newGroupURL, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': token
+                 },
+                body: JSON.stringify(requestBody)
+            })
+                .then(res=>res.json())
+                .then(res=>{
+                    console.log(res)
+                    dispatch(createGroup(res))
+                })
+                .catch(err=>console.log(err, "help"))
+
+
+        } catch (err) {
+            console.log(err, "--err in createNewGroup")
+
+        }
+
+    }
+
+}
+
+export const updateGroup = (token, requestBody) => {
+    return async (dispatch) => {
+        try {
+            let updateGroupURL = "/api/groups/" + requestBody.groupID + "/"
+            let requestOptions = {
+                method: "PUT",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': token
+                },
+                body: JSON.stringify(requestBody)
+            }
+
+            fetch(updateGroupURL, requestOptions)
+                .then(res => {
+                    if(res.status==200){
+                        return res.json()
+                    } else {
+                        console.log(res.status, res.statusText)
+                        return null
+                    }
+                })
+                .then(res=>{
+                    if(res!==null){
+                        //dispatch update
+                        dispatch(updateGroupDispatch(res))
+                    }
+                })
+                .catch(err => {
+                    console.log(err, "---error in updating group")
+
+                })
+
+
+
+        } catch {
+
+        }
+
+    }
+
 }

@@ -13,20 +13,20 @@ class WorkGroup(models.Model):
 		return self.name
 
 class Period(models.Model):
-	group = models.ForeignKey(WorkGroup, on_delete=models.CASCADE)
+	work_group = models.ForeignKey(WorkGroup, on_delete=models.CASCADE, related_name="periods")
 	period_start = models.DateTimeField()
 	period_end = models.DateTimeField()
 	published = models.BooleanField(default=False)
 
 	def __str__(self):
-		return f"Period by {self.group.name} starts at {self.period_start} ends at {self.period_end}."
+		return f"Period by {self.work_group.name} starts at {self.period_start} ends at {self.period_end}."
 
 class Shift(models.Model):
-	period = models.ForeignKey(Period, on_delete=models.CASCADE)
+	period = models.ForeignKey(Period, on_delete=models.CASCADE, blank=True)
 	shift_start = models.DateTimeField()
 	shift_end = models.DateTimeField()
 	workers_required = models.IntegerField()
-	users = models.ManyToManyField(User)
+	users = models.ManyToManyField(User, blank=True)
 
 class UserPreference(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -8,6 +8,8 @@ function NavBar({ loggedIn, logOutAPI }){
     let history = useHistory()
 
     const logout = () => {
+
+        //clears cookies and should also blacklist jwt
         logOutAPI()
             .then(res => {
                 history.push("/")
