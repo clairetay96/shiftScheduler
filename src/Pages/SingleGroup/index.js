@@ -3,6 +3,7 @@ import { withRouter, Link, useHistory } from "react-router-dom";
 import { connect } from 'react-redux'
 import AddMember from '../../Components/AddMember'
 import SingleMember from '../../Components/SingleMember'
+import SinglePeriodRow from '../../Components/SinglePeriodRow'
 import { deleteGroup } from '../../redux/action-creators'
 
 import Cookies from 'js-cookie'
@@ -64,7 +65,7 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
                 <h3>Periods</h3>
                 {userGroups[props.match.params.id].periods.map((item, index)=>{
                     if(item){
-                         return <div key={index}>{item.period_start}, {item.period_end}</div>
+                         return <div key={index}><SinglePeriodRow period_info={item} is_admin={userGroups[props.match.params.id].is_admin}/></div>
                      }
                  })}
 

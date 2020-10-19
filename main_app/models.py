@@ -31,8 +31,8 @@ class Shift(models.Model):
 class UserPreference(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	period = models.ForeignKey(Period, on_delete=models.CASCADE)
-	blocked_out_shifts = models.TextField()
-	preferred_shifts = models.TextField()
+	blocked_out_shifts = models.ManyToManyField(Shift, related_name="blocked_out_shifts", blank=True )
+	preferred_shifts = models.ManyToManyField(Shift, related_name="preferred_shifts", blank=True)
 	submitted_at = models.DateTimeField(default=now)
 
 

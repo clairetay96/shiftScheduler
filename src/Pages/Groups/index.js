@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import SingleGroup from '../SingleGroup'
 import AddGroup from '../../Components/AddGroup'
 import AddPeriod from '../AddPeriod'
+import SinglePeriod from '../SinglePeriod'
+
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 
 
@@ -38,6 +40,10 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
 
                     <Route path="/groups/:id/periods/new">
                         <AddPeriod />
+                    </Route>
+
+                    <Route path="/groups/:group_id/periods/:period_id">
+                        <SinglePeriod />
                     </Route>
 
                     <Route path="/groups/:id">

@@ -283,3 +283,46 @@ export const addPeriodDispatch = (token, requestBody) => {
 
     }
 }
+
+export const addPreference = (token, requestBody, group_id) => {
+
+    return async (dispatch) => {
+        try {
+            let addPrefURL = `/api/groups/${group_id}/periods/${requestBody.period}/indiv-preferences/`
+
+            let requestOptions = {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': token
+                },
+                body: JSON.stringify(requestBody)
+            }
+
+            fetch(addPrefURL, requestOptions)
+                .then(res=>{
+                    if(res.ok){
+                        return res.json()
+                    } else {
+                        console.log(res)
+                        return null
+                    }
+                })
+                .then(res=>{
+                    if(res){
+                        console.log(res)
+                    }
+                })
+                .catch(err=>{
+                    console.log(err, "error in adding user preference fetch req")
+                })
+
+
+
+        } catch (err) {
+            console.log(err, "error in adding user preference async func")
+        }
+    }
+
+}

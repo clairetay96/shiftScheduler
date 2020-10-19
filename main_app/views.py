@@ -165,6 +165,8 @@ class ShiftView(generics.ListCreateAPIView):
 	def get_queryset(self):
 		return Shift.objects.filter(users__id=self.request.user.id)
 
+
+
 #single shift by ID
 class ShiftViewWrite(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = ShiftSerializer
@@ -175,9 +177,27 @@ class ShiftViewWrite(generics.RetrieveUpdateDestroyAPIView):
 
 	#TO ADD: only group admins should be able to edit and delete shifts.
 
-class UserPreferenceView(generics.ListCreateAPIView):
+
+
+#single user's preferences
+class IndivUserPreferenceView(generics.ListCreateAPIView):
 	serializer_class = UserPreferenceSerializer
-	queryset = UserPreference.objects.all()
+
+	def get_queryset(self):
+		return UserPreference.objects.filter(user__id = self.request.user.id)
+
+	def post(self, request, group_id, period_id):
+		if request.user:
+			requestData = request.data
+			requestData['user'] = request.user.id
+			serializer = UserPreferenceSerializer(data=requestData)
+
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+
+			return Response(serializer.errors)
+
 
 class NotificationView(generics.ListCreateAPIView):
 	serializer_class = NotificationSerializer

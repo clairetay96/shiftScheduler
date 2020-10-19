@@ -11,26 +11,52 @@ import { updateGroup } from '../../redux/action-creators'
 
 function AddMember ({ show, hideAddMember, updateGroup, groupID }) {
 
-    let [memberList, setMemberList] = useState({0: (<div><MemberInput customKey={0} addMemberID={addMemberID}/><DeleteButton customKey={0} deleteMember={deleteMember}/></div>)})
-
-    let [counter, setCounter] = useState(1)
-
-    let [memberIDObj, setMemberIDObj] = useState({})
+    let [memberList, setMemberList] = useState([{user_id: null, username: ""}])
 
     //adds member input component to DOM
-    function addMember(){
-        setMemberList((prevState)=>{prevState[counter] = (<div><MemberInput customKey={counter} addMemberID={addMemberID}/><DeleteButton customKey={counter} deleteMember={deleteMember}/></div>); return prevState})
+    function createMemberInputUI(){
+        return memberList.map((item, index)=>{
+            return <div key={index}><MemberInput selectedUsername={item.username} addMemberID={addMemberID} customKey={index}/><DeleteButton deleteMember={deleteMember} customKey={index} /></div>
+        })
+    }
 
-        setCounter((prevState)=>prevState+1)
+    function addMember({ groupInfo }){
+        setMemberList((prevState)=>[...prevState, {user_id: null, username: ""}])
+    }
+
+
+    function deleteMember(customKey){
+
+        setMemberList((prevState)=>{
+            let newState = [...prevState]
+            newState.splice(customKey, 1)
+            return newState
+        })
+
+    }
+
+
+    function addMemberID(key, newID, newUsername) {
+        setMemberList((prevState)=>{
+            let someNewState = [...prevState]
+            someNewState[key]={user_id: newID, username: newUsername};
+
+            return someNewState
+        })
     }
 
     function addNewMemberToGroup(event){
         event.preventDefault()
 
-        //clean data
+        let newMembersID = []
+        for(let i=0;i<memberList.length;i++){
+            if(memberList[i].user_id){
+                newMembersID.push(memberList[i].user_id)
+            }
+        }
 
         let requestBody = {
-            newMembers: Object.values(memberIDObj),
+            newMembers: Object.values(newMembersID),
             updateType: "add_new_member",
             groupID: groupID
 
@@ -38,36 +64,11 @@ function AddMember ({ show, hideAddMember, updateGroup, groupID }) {
 
         let token = Cookies.get('csrftoken')
 
-        //call redux thunk
-
         updateGroup(token, requestBody)
 
 
         return
     }
-
-    //remove the member from both the setMemberList(HTML rendered on dom) and setMemberIDObj (IDs sent to server)
-    function deleteMember(key){
-        setMemberList((prevState)=>{
-            let newState = {...prevState}
-            delete newState[key];
-            return newState
-        })
-
-        setMemberIDObj((prevState)=>{
-            let newState = {...prevState}
-            delete newState[key];
-            return newState
-        })
-
-    }
-
-    //adds member to memberIDObj (list sent to server when new group request is posted)
-    function addMemberID(key, newID) {
-        setMemberIDObj((prevState)=>{prevState[key]=newID; return prevState})
-    }
-
-
 
     return (<div>
             <Modal size="lg" show={show} onHide={hideAddMember}>
@@ -79,9 +80,7 @@ function AddMember ({ show, hideAddMember, updateGroup, groupID }) {
 
                             Members: (type in their username)
 
-                            {Object.values(memberList).map((item, index)=>{
-                                return <div key={index}>{item}</div>
-                            })}
+                            {createMemberInputUI()}
 
                             <button onClick={addMember} type="button">Add another member.</button>
 

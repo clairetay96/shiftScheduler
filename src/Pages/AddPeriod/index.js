@@ -7,16 +7,17 @@ import ShiftInput from './ShiftInput'
 
 function AddPeriod ({ addPeriodDispatch,...props }) {
     let history = useHistory()
-
-
     let [shiftInfo, setShiftInfo] = useState([{shift_start: "", shift_end: "",workers_required: ""}])
+
+    let [periodStart, setPeriodStart] = useState("")
+    let [periodEnd, setPeriodEnd] = useState("")
 
 
     //create shift UI
 
     function createShiftUI(){
         return shiftInfo.map((item, index)=>{
-            return <div><ShiftInput shift_info={item} onChangeHandler={onChangeShiftInput} customKey={index} removeShiftHandler={deleteShiftInput}/></div>
+            return <div key={index}><ShiftInput shift_info={item} onChangeHandler={onChangeShiftInput} customKey={index} removeShiftHandler={deleteShiftInput}/></div>
         })
     }
 
@@ -81,8 +82,8 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
         event.preventDefault()
 
         let requestBody = {
-            period_start: event.target.startDate.value,
-            period_end: event.target.endDate.value,
+            period_start: periodStart,
+            period_end: periodEnd,
             work_group: props.match.params.id,
             shift_set: shiftInfo
         }
@@ -93,17 +94,26 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
 
     }
 
+    function onChangePeriodEnd(event){
+        setPeriodEnd(event.target.value)
+    }
+    function onChangePeriodStart(event){
+        setPeriodStart(event.target.value)
+    }
+
     return (<div>
+
+                <h1>Add Period</h1>
                 <form onSubmit={addPeriodForm}>
 
-                    Start Date: <input type="datetime-local" name="startDate"/>
-                    End Date: <input type="datetime-local" name="endDate"/>
+                    Start Date: <input type="datetime-local" value={periodStart} onChange={onChangePeriodStart} name="startDate"/>
+                    End Date: <input type="datetime-local" value={periodEnd} onChange={onChangePeriodEnd} name="endDate"/>
 
                     Shifts:
 
                     {createShiftUI()}
 
-                    <button type="button" onClick={addShiftInput}>Add another shift.</button>
+                    <button type="button" onClick={addShiftInput}>Add another shift</button>
 
 
 

@@ -10,19 +10,17 @@ import DeleteButton from './DeleteButton'
 
 
 const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
-    let [memberList, setMemberList] = useState({0: (<div><MemberInput customKey={0} addMemberID={addMemberID}/><DeleteButton customKey={0} deleteMember={deleteMember}/></div>)})
-    let [counter, setCounter] = useState(1)
-    let [memberIDObj, setMemberIDObj] = useState({})
-
+    let [memberList, setMemberList] = useState([{user_id: null, username: ""}])
+    let [groupName, setGroupName] = useState("")
 
     //make a new group
     function makeNewGroup(event) {
         event.preventDefault()
 
-        let memberIDList = Object.values(memberIDObj)
+        let memberIDList = memberList.map((item)=>item.user_id)
 
         let requestBody = {
-            name: event.target.groupName.value,
+            name: groupName,
             members_id: memberIDList
         }
         let token = Cookies.get('csrftoken')
@@ -30,31 +28,40 @@ const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
         createNewGroup(token, requestBody)
     }
 
+    function createMemberInputUI(){
+        return memberList.map((item, index)=>{
+            return <div key={index}><MemberInput selectedUsername={item.username} addMemberID={addMemberID} customKey={index}/><DeleteButton deleteMember={deleteMember} customKey={index} /></div>
+        })
+    }
+
     function addMember({ groupInfo }){
-        setMemberList((prevState)=>{prevState[counter] = (<div><MemberInput customKey={counter} addMemberID={addMemberID}/><DeleteButton customKey={counter} deleteMember={deleteMember}/></div>); return prevState})
-
-        setCounter((prevState)=>prevState+1)
+        setMemberList((prevState)=>[...prevState, {user_id: null, username: ""}])
     }
 
-    //remove the member from both the setMemberList(HTML rendered on dom) and setMemberIDObj (IDs sent to server)
-    function deleteMember(key){
+
+    function deleteMember(customKey){
+
         setMemberList((prevState)=>{
-            let newState = {...prevState}
-            delete newState[key];
-            return newState
-        })
-
-        setMemberIDObj((prevState)=>{
-            let newState = {...prevState}
-            delete newState[key];
+            let newState = [...prevState]
+            newState.splice(customKey, 1)
             return newState
         })
 
     }
 
-    //adds member to memberIDObj (list sent to server when new group request is posted)
-    function addMemberID(key, newID) {
-        setMemberIDObj((prevState)=>{prevState[key]=newID; return prevState})
+
+    function addMemberID(key, newID, newUsername) {
+        setMemberList((prevState)=>{
+            let someNewState = [...prevState]
+            someNewState[key]={user_id: newID, username: newUsername};
+
+            return someNewState
+        })
+    }
+
+    function onChangeGroupName(event){
+        setGroupName(event.target.value)
+
     }
 
     return (<Modal size="lg" show={show} onHide={hideAddGroup}>
@@ -64,15 +71,16 @@ const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
                 <Modal.Body>
                     <form onSubmit={makeNewGroup}>
 
-                            Name: <input type="text" name="groupName" />
+                            <input type="text" value={groupName} onChange={onChangeGroupName} placeholder="Group Name"/>
+
+                            <div>
 
                             Members: (type in their username)
 
-                            {Object.values(memberList).map((item, index)=>{
-                                return <div key={index}>{item}</div>
-                            })}
+                            {createMemberInputUI()}
 
                             <button onClick={addMember} type="button">Add another member.</button>
+                            </div>
 
                             <input type="submit" />
 

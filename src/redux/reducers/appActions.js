@@ -2,7 +2,8 @@ const appActions = (
     state = {
         userGroups: {},
         userShifts: [],
-        userNotifs: []
+        userPreferences: [],
+        userNotifs: [],
     }, action
     ) => {
 
@@ -31,6 +32,12 @@ const appActions = (
             updateGroups1[action.newPeriod.work_group].periods.push(action.newPeriod)
             return {...state, userGroups: updateGroups1}
 
+        case "GET_PREFERENCES":
+            return state
+
+        case "ADD_PREFERENCE":
+            return state
+
         case "GET_SHIFTS":
             return state
 
@@ -41,7 +48,8 @@ const appActions = (
             return {
                 userGroups: {},
                 userShifts: [],
-                userNotifs: []
+                userNotifs: [],
+                userPreferences: []
             }
 
         default:

@@ -76,8 +76,28 @@ class NotificationSerializer(serializers.ModelSerializer):
 		fields = ('id', 'message','user', 'received_at')
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-	user = UserSerializer(read_only=True)
-	period = PeriodSerializer(read_only=True)
+	user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+	period = serializers.PrimaryKeyRelatedField(queryset=Period.objects.all())
+
+	preferred_shifts = ShiftSerializer(read_only=True, many=True)
+	blocked_out_shifts = ShiftSerializer(read_only=True, many=True)
+
+	preferred_ids = serializers.PrimaryKeyRelatedField(queryset=Shift.objects.all(), write_only=True,many=True)
+	blocked_ids = serializers.PrimaryKeyRelatedField(queryset=Shift.objects.all(), write_only=True,many=True)
+
 	class Meta:
 		model = UserPreference
-		fields = ('id', 'period','user', 'blocked_out_shifts', 'preferred_shifts', 'submitted_at')
+		fields = ('id', 'period','user', 'blocked_out_shifts', 'preferred_shifts', 'submitted_at', 'preferred_ids', 'blocked_ids')
+
+	def create(self, validated_data):
+		preferred_ids = validated_data.pop('preferred_ids')
+		blocked_ids = validated_data.pop('blocked_ids')
+
+		newUserPreference = UserPreference.objects.create(**validated_data)
+
+		for i in preferred_ids:
+			newUserPreference.preferred_shifts.add(i)
+		for j in blocked_ids:
+			newUserPreference.blocked_out_shifts.add(j)
+
+		return newUserPreference
