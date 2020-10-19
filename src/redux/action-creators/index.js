@@ -1,4 +1,4 @@
-import { logIn, logOut, getGroups, createGroup, updateGroupDispatch } from '../actions'
+import { logIn, logOut, getGroups, createGroup, updateGroupDispatch, createPeriodDispatch, deleteGroupDispatch } from '../actions'
 import Cookies from 'js-cookie'
 
 export const logInAPI = (requestBody) => {
@@ -204,10 +204,82 @@ export const updateGroup = (token, requestBody) => {
 
 
 
-        } catch {
+        } catch (err){
+            console.log(err, "----error in updating group dispatch")
 
         }
 
     }
 
+}
+
+
+export const deleteGroup = (token, group_id) => {
+    return async (dispatch) => {
+        try {
+
+            let deleteGroupURL = "/api/groups/"+group_id
+            let requestOptions = {
+                method: "DELETE",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': token
+                }
+            }
+
+            fetch(deleteGroupURL, requestOptions)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    dispatch(deleteGroupDispatch(group_id))
+
+                })
+
+
+        } catch (err) {
+            console.log(err, "---error in deleting group")
+        }
+    }
+}
+
+
+export const addPeriodDispatch = (token, requestBody) => {
+    return async (dispatch) => {
+        try {
+            let addPeriodURL = `/api/groups/${requestBody.work_group}/periods/`
+
+            let requestOptions = {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': token
+                },
+                body: JSON.stringify(requestBody)
+            }
+
+            fetch(addPeriodURL, requestOptions)
+                .then(res => {
+                    if(res.ok){
+                        return res.json()
+                    } else {
+                        console.log(res)
+                        return null
+                    }
+                })
+                .then(res => {
+                    if(res){
+                        dispatch(createPeriodDispatch(res))
+                    }
+                })
+                .catch(err => {
+                    console.log(err, "Error in adding period dispatch")
+                })
+
+        } catch (err) {
+            console.log(err, "Error in adding period dispatch")
+        }
+
+    }
 }

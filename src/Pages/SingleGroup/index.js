@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, useHistory } from "react-router-dom";
 import { connect } from 'react-redux'
 import AddMember from '../../Components/AddMember'
 import SingleMember from '../../Components/SingleMember'
+import { deleteGroup } from '../../redux/action-creators'
 
-const SingleGroup = ({ userGroups,...props }) => {
+import Cookies from 'js-cookie'
+
+const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
+    let history = useHistory()
+
     //modal functionality - show vs hide
     let [show, setShow] = useState(false)
 
@@ -21,6 +26,12 @@ const SingleGroup = ({ userGroups,...props }) => {
 
     //deleteGroup functionality - redux thunk
 
+    function deleteGroupOnClick(){
+        deleteGroup(Cookies.get('csrftoken'), props.match.params.id)
+        history.push("/groups/")
+
+    }
+
 
 
     if(userGroups[props.match.params.id]){
@@ -28,8 +39,8 @@ const SingleGroup = ({ userGroups,...props }) => {
                 <h1>{userGroups[props.match.params.id].name}</h1>
                 {userGroups[props.match.params.id].is_admin ?
                     <div>
-                                    <button>Delete Group</button>
-                                </div> : null
+                        <button onClick={deleteGroupOnClick}>Delete Group</button>
+                    </div> : null
                 }
                 <div>
 
@@ -48,6 +59,16 @@ const SingleGroup = ({ userGroups,...props }) => {
                     </div> :
 
                     null }
+
+                <div>
+                <h3>Periods</h3>
+                {userGroups[props.match.params.id].periods.map((item, index)=>{
+                    if(item){
+                         return <div key={index}>{item.period_start}, {item.period_end}</div>
+                     }
+                 })}
+
+                </div>
 
 
                 <div>
@@ -76,4 +97,4 @@ const mapStateToProps = (state)=>({
     userGroups: state.appActions.userGroups
 })
 
-export default withRouter(connect(mapStateToProps)(SingleGroup))
+export default withRouter(connect(mapStateToProps, { deleteGroup })(SingleGroup))

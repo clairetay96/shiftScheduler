@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import SingleGroup from '../SingleGroup'
 import AddGroup from '../../Components/AddGroup'
+import AddPeriod from '../AddPeriod'
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 
 
@@ -24,7 +25,7 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
 
     //if userGroups in redux store is not populated, fetch group data on component load.
     useEffect(()=>{
-        if (userGroups.length===0){
+        if (Object.keys(userGroups).length===0){
             getUserGroups()
         }
     }, [])
@@ -35,8 +36,8 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
     return (<div>
                 <Switch>
 
-                    <Route path={`/groups/:id/periods/new`}>
-                        New Periods
+                    <Route path="/groups/:id/periods/new">
+                        <AddPeriod />
                     </Route>
 
                     <Route path="/groups/:id">

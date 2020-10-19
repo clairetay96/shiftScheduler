@@ -15,6 +15,8 @@ urlpatterns = [
 	path('find-user/<str:user_input>/', views.find_user),
 	path('groups/<int:group_id>/periods/', views.PeriodView.as_view()),
 	path('periods/<int:id>/', views.PeriodViewWrite.as_view()),
+	path('shifts/<int:id>/', views.ShiftViewWrite.as_view()),
+	path('shifts/', views.ShiftView.as_view()),
 	# path('groups/<>/periods/<>/'),
 	# path('groups/<>/periods/<>/all-preferences/'),
 	# path('groups/<>/periods/<>/indiv-preferences/'),

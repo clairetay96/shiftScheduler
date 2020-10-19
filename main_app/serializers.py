@@ -16,7 +16,8 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Shift
-		fields = ('period','shift_start', 'shift_end', 'workers_required', 'users')
+		fields = ('period','shift_start', 'shift_end', 'workers_required', 'users', 'id')
+		lookup_field='id'
 
 class PeriodSerializer(serializers.ModelSerializer):
 	shift_set = ShiftSerializer(many=True, required=False)

@@ -8,6 +8,10 @@ export const LOG_OUT = "LOG_OUT"
 export const GET_GROUPS = "GET_GROUPS"
 export const CREATE_GROUP = "CREATE_GROUP"
 export const UPDATE_GROUP = "UPDATE_GROUP"
+export const DELETE_GROUP = "DELETE_GROUP"
+
+
+export const ADD_PERIOD = "ADD_PERIOD"
 
 export const GET_SHIFTS = "GET_SHIFTS"
 export const GET_NOTIFS = "GET_NOTIFS"

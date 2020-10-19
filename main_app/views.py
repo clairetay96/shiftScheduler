@@ -92,15 +92,14 @@ class WorkGroupViewWrite(generics.RetrieveUpdateDestroyAPIView):
 				for i in request.data['newMembers']:
 					group_to_update.members.add(i)
 
-				group_to_update.save()
-
 			elif request.data['updateType']=="remove_member_from_group":
 				group_to_update.members.remove(request.data['userID'])
 				group_to_update.admins.remove(request.data['userID'])
 
-			##add admin
+			##TO ADD: add admin
 
 
+			group_to_update.save()
 			return self.get(request,id)
 
 	def delete(self, request, id, format=None):
@@ -126,8 +125,9 @@ class PeriodView(generics.ListCreateAPIView):
 		return Period.objects.filter(work_group__id=self.kwargs['group_id'])
 
 	def post(self, request, group_id):
-
 		if request.user:
+			#TO ADD: only an admin can add period.
+			print(request.data)
 			serializer = PeriodSerializer(data=request.data)
 			if serializer.is_valid():
 				serializer.save()
@@ -142,20 +142,38 @@ class PeriodViewWrite(generics.RetrieveUpdateDestroyAPIView):
 	def get_queryset(self):
 		return Period.objects.filter(id=self.kwargs['id'])
 
-	# def put(self):
-	# 	#add shifts
+	# TO ADD:
+	def put(self, request, id):
+		#add shifts. only an admin can.
+		if request.user:
 
-	# 	#remove shifts
+			period_to_update = Period.objects.get(pk=id)
+
+			if request.data['updateType']=="add_shift":
+				for i in request.data['newShifts']:
+					Shift.objects.create(period=period_to_update, **i)
+
+
+			return self.get(request, id)
 
 
 
-
-
-
-
+#get all of a user's shifts
 class ShiftView(generics.ListCreateAPIView):
 	serializer_class = ShiftSerializer
-	queryset = Shift.objects.all()
+
+	def get_queryset(self):
+		return Shift.objects.filter(users__id=self.request.user.id)
+
+#single shift by ID
+class ShiftViewWrite(generics.RetrieveUpdateDestroyAPIView):
+	serializer_class = ShiftSerializer
+	lookup_field='id'
+
+	def get_queryset(self):
+		return Shift.objects.filter(id=self.kwargs['id'])
+
+	#TO ADD: only group admins should be able to edit and delete shifts.
 
 class UserPreferenceView(generics.ListCreateAPIView):
 	serializer_class = UserPreferenceSerializer
@@ -166,7 +184,7 @@ class NotificationView(generics.ListCreateAPIView):
 	queryset = Notification.objects.all()
 
 def logout(request):
-	#must blacklist jwt
+	#TO ADD: must blacklist jwt
 
 	#clear session and csrf token
 	response = HttpResponse()
