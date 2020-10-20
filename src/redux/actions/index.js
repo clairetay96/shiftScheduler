@@ -1,7 +1,7 @@
-import { LOG_IN, LOG_OUT, GET_GROUPS, GET_SHIFTS, GET_NOTIFS, CREATE_GROUP, UPDATE_GROUP, DELETE_GROUP, ADD_PERIOD } from '../constants/ActionTypes'
+import { LOG_IN, LOG_OUT, GET_GROUPS, GET_SHIFTS, GET_NOTIFS, CREATE_GROUP, UPDATE_GROUP, DELETE_GROUP, ADD_PERIOD, DELETE_PERIOD, UPDATE_PREFERENCE } from '../constants/ActionTypes'
 
-export const logIn = () => {
-    return {type: LOG_IN}
+export const logIn = (userCred) => {
+    return {type: LOG_IN, userCred}
 }
 
 export const logOut = () => {
@@ -26,4 +26,17 @@ export const deleteGroupDispatch = (group_id) => {
 
 export const createPeriodDispatch = (newPeriod) => {
     return {type: ADD_PERIOD, newPeriod}
+}
+
+export const deletePeriodDispatch = (periodData) => {
+    return { type: DELETE_PERIOD, periodData }
+}
+
+export const getShifts = (allShifts) => {
+    return {type: GET_SHIFTS, allShifts}
+
+}
+
+export const updatePreferenceSubmitted = (periodData) =>{
+    return { type: UPDATE_PREFERENCE, periodData}
 }

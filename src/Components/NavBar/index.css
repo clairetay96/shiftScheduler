@@ -23,6 +23,14 @@
 	justify-content: flex-end;
 }
 
+.welcome-logout {
+	display: flex;
+}
+
+.welcome-logout > * {
+	margin: 5px;
+}
+
 .logout {
 	cursor: pointer;
 }

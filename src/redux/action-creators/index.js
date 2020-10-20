@@ -1,35 +1,7 @@
-import { logIn, logOut, getGroups, createGroup, updateGroupDispatch, createPeriodDispatch, deleteGroupDispatch } from '../actions'
+import { logIn, logOut, getGroups, createGroup, updateGroupDispatch, deleteGroupDispatch, createPeriodDispatch, deletePeriodDispatch, getShifts, updatePreferenceSubmitted } from '../actions'
 import Cookies from 'js-cookie'
 
-export const logInAPI = (requestBody) => {
 
-    return async (dispatch)=>{
-        try {
-
-            let logInURL = "/api/rest-auth/login/"
-            //log in
-            let logInReq = await fetch(logInURL, {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(requestBody)
-                })
-
-                if(logInReq.status===200){
-                    //set jwt
-                    dispatch(logIn())
-                    console.log("logged in")
-                } else {
-                    console.log(logInReq.statusText, logInReq.status, logInReq)
-                }
-
-        } catch (err) {
-            console.log(err, "error in logInAPI")
-        }
-    }
-}
 
 export const logOutAPI = () => {
     return async(dispatch)=>{
@@ -120,16 +92,45 @@ export const getUserGroups = () => {
     }
 }
 
+export const getUserShifts = () => {
+    return async (dispatch) => {
+        try {
+
+            let getShiftsURL = "/api/shifts/"
+            fetch(getShiftsURL)
+                .then(res=> {
+                    if(res.ok){
+                        return res.json()
+                    } else {
+                        console.log(res)
+                        return null
+                    }
+                })
+                .then(res => {
+                    dispatch(getShifts(res))
+
+                })
+                .catch(err => {
+                    console.log(err, "---error in fetch req for getting shifts")
+                })
+
+        } catch (err){
+            console.log(err, "---error in getting user shifts action-creators")
+        }
+    }
+}
+
 
 export const openAppValidate = () => {
     return async (dispatch) => {
         let validateURL = "/api/on-app-open-validate"
         let validity = await fetch(validateURL)
-            .then(res => res.text())
+            .then(res => res.json())
 
-        if(validity==="true"){
-            dispatch(logIn())
+        if(validity.loggedIn){
+            dispatch(logIn(validity))
             getUserGroups()(dispatch)
+            getUserShifts()(dispatch)
         } else {
             return
         }
@@ -153,7 +154,7 @@ export const createNewGroup = (token, requestBody) => {
             })
                 .then(res=>res.json())
                 .then(res=>{
-                    console.log(res)
+
                     dispatch(createGroup(res))
                 })
                 .catch(err=>console.log(err, "help"))
@@ -231,7 +232,7 @@ export const deleteGroup = (token, group_id) => {
             fetch(deleteGroupURL, requestOptions)
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res)
+
                     dispatch(deleteGroupDispatch(group_id))
 
                 })
@@ -284,6 +285,41 @@ export const addPeriodDispatch = (token, requestBody) => {
     }
 }
 
+export const deletePeriod = (token, period_id, group_id) => {
+    return async (dispatch) => {
+        try {
+
+            let deletePeriodURL = `/api/periods/${period_id}`
+
+            let requestOptions = {
+                method: "DELETE",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': token
+                }
+            }
+
+            let deleteRequest = await fetch(deletePeriodURL, requestOptions)
+                    .catch(err=>{
+                        console.log(err, "Error in delete fetch request")
+                    })
+
+            if(deleteRequest.ok){
+                dispatch(deletePeriodDispatch({period_id, group_id}))
+            } else {
+                console.log(deleteRequest, "some error in delete request")
+            }
+
+
+
+
+        } catch (err) {
+            console.log(err, "Error in delete period action-creators")
+        }
+    }
+}
+
 export const addPreference = (token, requestBody, group_id) => {
 
     return async (dispatch) => {
@@ -311,7 +347,7 @@ export const addPreference = (token, requestBody, group_id) => {
                 })
                 .then(res=>{
                     if(res){
-                        console.log(res)
+                        dispatch(updatePreferenceSubmitted({period_id: requestBody.period, group_id}))
                     }
                 })
                 .catch(err=>{
@@ -325,4 +361,37 @@ export const addPreference = (token, requestBody, group_id) => {
         }
     }
 
+}
+
+export const logInAPI = (requestBody) => {
+
+    return async (dispatch)=>{
+        try {
+
+            let logInURL = "/api/rest-auth/login/"
+            //log in
+            let logInReq = await fetch(logInURL, {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestBody)
+                })
+
+                if(logInReq.status===200){
+                    let userCred = await logInReq.json()
+
+                    dispatch(logIn(userCred.user))
+                    getUserGroups()(dispatch)
+                    getUserShifts()(dispatch)
+
+                } else {
+                    console.log(logInReq.statusText, logInReq.status, logInReq)
+                }
+
+        } catch (err) {
+            console.log(err, "error in logInAPI")
+        }
+    }
 }

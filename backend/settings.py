@@ -25,7 +25,7 @@ SECRET_KEY = 'us!r5y6*aj@54up3n5=%h^yl9-!#_72cpdyj)p^gt7o1i^em4+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shift-scheduler-auto.heroku-app.com','127.0.0.1:8000']
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

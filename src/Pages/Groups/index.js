@@ -4,6 +4,7 @@ import SingleGroup from '../SingleGroup'
 import AddGroup from '../../Components/AddGroup'
 import AddPeriod from '../AddPeriod'
 import SinglePeriod from '../SinglePeriod'
+import SinglePeriodEdit from '../SinglePeriodEdit'
 
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 
@@ -42,6 +43,15 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
                         <AddPeriod />
                     </Route>
 
+                    <Route path="/groups/:group_id/periods/:period_id/edit-preference">
+                       {/*Update preference*/}
+                    </Route>
+
+                    <Route path="/groups/:group_id/periods/:period_id/edit">
+                        <SinglePeriodEdit />
+                    </Route>
+
+                    {/*Either show assigned shifts or form to submit shift preferences, depending on whether or not the period has been published*/}
                     <Route path="/groups/:group_id/periods/:period_id">
                         <SinglePeriod />
                     </Route>

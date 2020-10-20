@@ -1,5 +1,5 @@
 import React, { useState }from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { addPreference } from '../../redux/action-creators'
 import Cookies from 'js-cookie'
@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
     let group_id = props.match.params.group_id
     let period_id = props.match.params.period_id
+    let history = useHistory()
 
     let [blockedOut, setBlockedOut] = useState([])
     let [preferred, setPreferred] = useState([])
@@ -23,6 +24,8 @@ function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
         let token = Cookies.get('csrftoken')
 
         addPreference(token, requestBody, group_id)
+
+        history.push(`/groups/${group_id}`)
 
 
     }

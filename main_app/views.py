@@ -25,17 +25,25 @@ class WorkGroupView(generics.ListCreateAPIView):
 		user_id = self.request.user.id
 		return WorkGroup.objects.filter(members__id=user_id)
 
-	#add the is_admin attribute to all results
+
 	def get(self, request, format=None):
 		response = super().get(request)
 		response = JSONRenderer().render(response.data)
 		response = json.loads(response.decode("utf-8"))
 
 		for i in response:
+			#check if the user is admin, add is_admin to all results
 			if request.user.id in [j['id'] for j in i['admins']]:
 				i['is_admin'] = True
 			else:
 				i['is_admin'] = False
+
+			#check if the user has submitted preferences, add preference_submitted to all periods
+			for j in i['periods']:
+				if UserPreference.objects.filter(user__id=request.user.id, period__id=j['id']).exists():
+					j['preference_submitted']= True
+				else:
+					j['preference_submitted']= False
 
 		return Response(response)
 
@@ -56,7 +64,7 @@ class WorkGroupView(generics.ListCreateAPIView):
 				return Response(new_serializer)
 
 			print(serializer.errors)
-			return Response("all bad")
+			return Response(serializer.errors)
 
 
 class WorkGroupViewWrite(generics.RetrieveUpdateDestroyAPIView):
@@ -127,7 +135,6 @@ class PeriodView(generics.ListCreateAPIView):
 	def post(self, request, group_id):
 		if request.user:
 			#TO ADD: only an admin can add period.
-			print(request.data)
 			serializer = PeriodSerializer(data=request.data)
 			if serializer.is_valid():
 				serializer.save()
@@ -152,8 +159,6 @@ class PeriodViewWrite(generics.RetrieveUpdateDestroyAPIView):
 			if request.data['updateType']=="add_shift":
 				for i in request.data['newShifts']:
 					Shift.objects.create(period=period_to_update, **i)
-
-
 			return self.get(request, id)
 
 
@@ -215,8 +220,13 @@ def logout(request):
 #runs everytime the app loads/is refreshed - checks if there's still a session going on
 def on_app_open_validate(request):
 	if request.session.session_key:
-		return HttpResponse("true")
-	return HttpResponse("false")
+		userCred = {
+		'username': request.user.username,
+		'userID': request.user.id,
+		'loggedIn': True
+		}
+		return JsonResponse(userCred)
+	return JsonResponse({'loggedIn': False})
 
 
 def find_user(request, user_input):

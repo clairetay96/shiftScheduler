@@ -1,14 +1,23 @@
 const authActions = (
     state = {
-        loggedIn: false
+        loggedIn: false,
+        username: "",
+        userID: "",
     },
     action
     ) => {
     switch (action.type){
         case "LOG_IN":
-            return {...state, loggedIn: true}
+            return {
+                ...state,
+                username: action.userCred.username,
+                userID: action.userCred.userID,
+                loggedIn: true}
         case "LOG_OUT":
-            return {...state, loggedIn: false}
+            return {
+                username: "",
+                userID: "",
+                loggedIn: false}
 
         default:
             return state

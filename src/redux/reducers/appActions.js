@@ -32,14 +32,42 @@ const appActions = (
             updateGroups1[action.newPeriod.work_group].periods.push(action.newPeriod)
             return {...state, userGroups: updateGroups1}
 
+        case "DELETE_PERIOD":
+
+            let updateGroups3 = {...state.userGroups}
+            let required_periods1 = updateGroups3[action.periodData.group_id].periods
+            let spliceIndex;
+
+            for(let i=0; i < required_periods1.length ; i ++) {
+                if (required_periods1[i].id == action.periodData.period_id){
+                    spliceIndex = i
+                    break
+                }
+            }
+
+            if(spliceIndex!==undefined){
+                updateGroups3[action.periodData.group_id].periods.splice(spliceIndex, 1)
+            }
+            return {...state, userGroups: updateGroups3}
+
         case "GET_PREFERENCES":
             return state
 
-        case "ADD_PREFERENCE":
-            return state
+        case "UPDATE_PREFERENCE":
+            let updateGroups2 = {...state.userGroups}
+            let required_periods = updateGroups2[action.periodData.group_id].periods
+
+            for(let i=0; i < required_periods.length ; i ++) {
+                if (required_periods[i].id == action.periodData.period_id){
+                    updateGroups2[action.periodData.group_id].periods[i].preference_submitted = true
+                    break
+                }
+            }
+
+            return {...state, userGroups: updateGroups2}
 
         case "GET_SHIFTS":
-            return state
+            return {...state, userShifts: action.allShifts }
 
         case "GET_NOTIFS":
             return state

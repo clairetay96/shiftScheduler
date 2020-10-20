@@ -71,7 +71,7 @@ const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
                 <Modal.Body>
                     <form onSubmit={makeNewGroup}>
 
-                            <input type="text" value={groupName} onChange={onChangeGroupName} placeholder="Group Name"/>
+                            <input type="text" value={groupName} onChange={onChangeGroupName} placeholder="Group Name" autoComplete="off"/>
 
                             <div>
 

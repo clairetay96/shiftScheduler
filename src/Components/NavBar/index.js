@@ -4,7 +4,7 @@ import { logOutAPI } from '../../redux/action-creators'
 import { Switch, Route, Link, withRouter, useHistory } from "react-router-dom";
 import './index.css'
 
-function NavBar({ loggedIn, logOutAPI }){
+function NavBar({ loggedIn, logOutAPI, username, userID }){
     let history = useHistory()
 
     const logout = () => {
@@ -22,7 +22,8 @@ function NavBar({ loggedIn, logOutAPI }){
                     <div>
                        <Link to="/"> Home</Link> | <Link to="/groups">Groups</Link>
                     </div>
-                    <div>
+                    <div className="welcome-logout">
+                        <div>Welcome, {username}.</div>
                         <div className="logout" onClick={logout}>Logout</div>
                     </div>
 
@@ -37,7 +38,9 @@ function NavBar({ loggedIn, logOutAPI }){
 }
 
 const mapStateToProps = (state) => ({
-    loggedIn: state.authActions.loggedIn
+    loggedIn: state.authActions.loggedIn,
+    username: state.authActions.username,
+    userID: state.authActions.userID
 })
 
 export default withRouter(connect(mapStateToProps, { logOutAPI })(NavBar))
