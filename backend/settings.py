@@ -26,7 +26,7 @@ SECRET_KEY = 'us!r5y6*aj@54up3n5=%h^yl9-!#_72cpdyj)p^gt7o1i^em4+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shift-scheduler-auto.herokuapp.com','127.0.0.1:8000']
+ALLOWED_HOSTS = ['shift-scheduler-auto.herokuapp.com','localhost']
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -118,11 +118,11 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': 'shift_schedule',
-    # }
-    'default': dj_database_url.config(conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'shift_schedule',
+    }
+    # 'default': dj_database_url.config(conn_max_age=600)
 }
 
 
