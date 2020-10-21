@@ -87,6 +87,13 @@ class WorkGroupViewWrite(generics.RetrieveUpdateDestroyAPIView):
 		else:
 			response['is_admin'] = False
 
+		for j in response['periods']:
+			if UserPreference.objects.filter(user__id=request.user.id, period__id=j['id']).exists():
+				j['preference_submitted'] = True
+			else:
+				j['preference_submitted'] = False
+
+
 		return Response(response)
 
 
@@ -149,16 +156,20 @@ class PeriodViewWrite(generics.RetrieveUpdateDestroyAPIView):
 	def get_queryset(self):
 		return Period.objects.filter(id=self.kwargs['id'])
 
-	# TO ADD:
+
 	def put(self, request, id):
-		#add shifts. only an admin can.
 		if request.user:
 
 			period_to_update = Period.objects.get(pk=id)
 
-			if request.data['updateType']=="add_shift":
-				for i in request.data['newShifts']:
-					Shift.objects.create(period=period_to_update, **i)
+			#update relevant fields
+			period_to_update.period_start = request.data['period_start']
+			period_to_update.period_end = request.data['period_end']
+			period_to_update.published = request.data['published']
+
+			period_to_update.save()
+			print("period updated.")
+
 			return self.get(request, id)
 
 
@@ -170,6 +181,20 @@ class ShiftView(generics.ListCreateAPIView):
 	def get_queryset(self):
 		return Shift.objects.filter(users__id=self.request.user.id)
 
+	#for creating shifts with associated users.
+	def post(self, request):
+
+		request_data = request.data
+		user_ids = request_data.pop('users')
+		request_data['user_ids'] = user_ids
+
+		serializer = ShiftSerializer(data=request_data)
+
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors)
+
 
 
 #single shift by ID
@@ -180,7 +205,24 @@ class ShiftViewWrite(generics.RetrieveUpdateDestroyAPIView):
 	def get_queryset(self):
 		return Shift.objects.filter(id=self.kwargs['id'])
 
-	#TO ADD: only group admins should be able to edit and delete shifts.
+	def put(self, request, id):
+
+		shift_to_update = Shift.objects.get(pk=id)
+		user_ids = request.data['users']
+
+		#update shift start, end and worker requirement
+		shift_to_update.shift_start = request.data['shift_start']
+		shift_to_update.shift_end = request.data['shift_end']
+		shift_to_update.workers_required = request.data['workers_required']
+
+		#update shift workers - clear set then rebuild.
+		shift_to_update.users.clear()
+		for i in user_ids:
+			shift_to_update.users.add(i)
+
+		shift_to_update.save()
+
+		return JsonResponse(True, safe=False)
 
 
 

@@ -14,10 +14,22 @@ class UserSerializer(serializers.ModelSerializer):
 class ShiftSerializer(serializers.ModelSerializer):
 	users = UserSerializer(read_only=True, many=True, required=False)
 
+	user_ids = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+
 	class Meta:
 		model = Shift
-		fields = ('period','shift_start', 'shift_end', 'workers_required', 'users', 'id')
+		fields = ('period','shift_start', 'shift_end', 'workers_required', 'users', 'id', 'user_ids')
 		lookup_field='id'
+
+	def create(self, validated_data):
+		user_ids = validated_data.pop(user_ids)
+		newShift = Shift.objects.create(**validated_data)
+
+		for i in user_ids:
+			newShift.users.add(i)
+		return newShift
+
+
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
 	user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -48,7 +60,7 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
 
 class PeriodSerializer(serializers.ModelSerializer):
 	shift_set = ShiftSerializer(many=True, required=False)
-	userpreference_set = UserPreferenceSerializer(many=True)
+	userpreference_set = UserPreferenceSerializer(read_only=True, many=True)
 
 	class Meta:
 		model = Period

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter, useHistory } from 'react-router-dom'
 import { addPeriodDispatch } from '../../redux/action-creators'
 import ShiftInput from './ShiftInput'
+import moment from 'moment'
 
 function AddPeriod ({ addPeriodDispatch,...props }) {
     let history = useHistory()
@@ -12,12 +13,82 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
     let [periodStart, setPeriodStart] = useState("")
     let [periodEnd, setPeriodEnd] = useState("")
 
+    //update shiftInfo based on checked days in repeat shifts modal.
+    function repeatShift(repeatDays, shiftStartTime, shiftEndTime, workersRequired){
+
+        //check that periodStart and periodEnd are defined.
+        let momentShiftStart = moment(shiftStartTime)
+        let momentShiftStartTime = moment(shiftStartTime).format('HH:mm')
+
+
+        let momentShiftEnd = moment(shiftEndTime)
+        let shiftDuration = moment.duration(momentShiftEnd.diff(momentShiftStart))
+        let shiftDurationAsMinutes = shiftDuration.asMinutes()
+
+        repeatDays.forEach((item)=>{
+            let dayValue = parseInt(item)
+            let start = moment(periodStart)
+            let end = moment(periodEnd)
+
+
+            //set start day to first xday (eg monday, tuesday.. ) in period
+            while(start < end && start.day() !== dayValue ){
+                start.add(1, 'days')
+            }
+
+            while (start < end ){
+                let shiftStartFormatted = start.format("YYYY-MM-DD")+"T"+momentShiftStartTime
+
+                let shiftEndFormatted = moment(start.format("YYYY-MM-DD")+"T"+momentShiftStartTime).add(shiftDurationAsMinutes, 'minutes').format()
+
+                shiftEndFormatted = shiftEndFormatted.slice(0, shiftEndFormatted.length - 6)
+
+                if(shiftStartTime!==shiftStartFormatted && shiftEndFormatted!==shiftEndTime){
+                    let newShiftInfo = {
+                        shift_start: shiftStartFormatted,
+                        shift_end: shiftEndFormatted,
+                        workers_required: workersRequired
+                    }
+
+                    setShiftInfo((prevState)=>[...prevState, newShiftInfo])
+
+                }
+
+
+
+                start.add(7, 'days')
+            }
+
+            setShiftInfo((prevState)=>{
+                let tempNewState = [...prevState]
+                tempNewState.sort((a,b)=>{
+                    if(moment(a.shift_start).isBefore(b.shift_start)){
+                        return -1
+
+                    } else if (moment(b.shift_start).isBefore(a.shift_start)) {
+                        return 1
+                    }
+                    return 0
+
+                })
+
+                return tempNewState
+            })
+
+
+
+        })
+
+    }
+
+
+
 
     //create shift UI
 
     function createShiftUI(){
         return shiftInfo.map((item, index)=>{
-            return <div key={index}><ShiftInput shift_info={item} onChangeHandler={onChangeShiftInput} customKey={index} removeShiftHandler={deleteShiftInput}/></div>
+            return <div key={index}><ShiftInput shift_info={item} onChangeHandler={onChangeShiftInput} customKey={index} removeShiftHandler={deleteShiftInput} repeatShift={repeatShift}/></div>
         })
     }
 
@@ -53,7 +124,6 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
 
     function onChangeShiftInput(eventValue, eventName, customKey){
 
-
         setShiftInfo((prevState)=>{
             let newState1 = [...prevState]
             if(eventName==="shift_start"){
@@ -73,10 +143,6 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
         return
     }
 
-
-    //function to repeat shifts: 1.Calculate values required, store in array. 2. add to shift info. 3. generate HTML objs.
-
-
     //on submit
     function addPeriodForm(event){
         event.preventDefault()
@@ -95,9 +161,14 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
     }
 
     function onChangePeriodEnd(event){
+        //TO ADD: check that > period start
+        //TO ADD: make sure that all shifts are within the period
         setPeriodEnd(event.target.value)
+
     }
     function onChangePeriodStart(event){
+        //TO ADD: check that < period end
+        //TO ADD: make sure that all shifts are within the period.
         setPeriodStart(event.target.value)
     }
 

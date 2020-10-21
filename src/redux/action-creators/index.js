@@ -285,11 +285,115 @@ export const addPeriodDispatch = (token, requestBody) => {
     }
 }
 
+export const updatePeriod = (token, group_id, periodEdit, shiftEdit, shiftDel, shiftAdd) => {
+    return async (dispatch) =>{
+        try {
+
+            let shiftUpdates = []
+            //edit shifts
+            shiftEdit.forEach((item)=>{
+
+                let shiftReqOptions = {
+                    method: "PUT",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        'X-CSRFToken': token
+                    },
+                    body: JSON.stringify(item)
+                }
+
+                let requestURL = `/api/shifts/${item.id}/`
+
+
+                let editShiftReq = fetch(requestURL, shiftReqOptions)
+                shiftUpdates.push(editShiftReq)
+            })
+
+            //delete shifts
+            shiftDel.forEach((item)=>{
+
+                let shiftReqOptions = {
+                    method: "DELETE",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        'X-CSRFToken': token
+                    }
+                }
+
+                let requestURL = `/api/shifts/${item.id}/`
+
+                let delShiftReq = fetch(requestURL, shiftReqOptions)
+                shiftUpdates.push(delShiftReq)
+            })
+
+            //add shifts
+            shiftAdd.forEach((item)=>{
+
+                let shiftReqOptions = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        'X-CSRFToken': token
+                    },
+                    body: JSON.stringify(item)
+
+                }
+
+                let requestURL = `/api/shifts/`
+                let addShiftReq = fetch(requestURL, shiftReqOptions)
+                shiftUpdates.push(addShiftReq)
+            })
+
+            //then update period
+
+            Promise.all(shiftUpdates)
+                .then(res=> {
+                    let updatePeriodURL = `/api/periods/${periodEdit.id}/`
+                    let periodRequestOptions = {
+                        method: "PUT",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            'X-CSRFToken': token
+                        },
+                        body: JSON.stringify(periodEdit)
+                    }
+
+                    return fetch(updatePeriodURL, periodRequestOptions)
+
+                })
+                .then(res=>{
+                    if(res.ok){
+                        return res.json()
+                    } else {
+                        return null
+                    }
+                })
+                .then(res=>{
+                    if(res){
+                        console.log(res)
+                        //dispatch redux action
+                    }
+                })
+                .catch(err => {
+                    console.log(err, "Error in updating period.")
+                })
+
+
+        } catch (err) {
+            console.log(err, "Error in updating period in action creators.")
+        }
+    }
+}
+
 export const deletePeriod = (token, period_id, group_id) => {
     return async (dispatch) => {
         try {
 
-            let deletePeriodURL = `/api/periods/${period_id}`
+            let deletePeriodURL = `/api/periods/${period_id}/`
 
             let requestOptions = {
                 method: "DELETE",

@@ -1,38 +1,54 @@
 import React, { useState } from 'react'
+import { Typeahead } from 'react-bootstrap-typeahead'
+import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 
-const MemberInput = ({ addMemberID, customKey, selectedUsername }) => {
-    let [options, setOptions] = useState(null)
+const MemberInput = ({ addMemberID, existingMembers }) => {
+    let [options, setOptions] = useState([]) //array containing usernames
+    let [optionUsernames, setOptionUsernames] = useState({}) //object mapping username to IDs
 
-    const onChangeHandler = (e) => {
-        addMemberID(customKey, null, e.target.value)
+    const onInputChangeHandler = (e) => {
 
-        if(e.target.value.length > 0){
+        if(e.length > 0){
 
             //make request to find username containing target value
-            let URL = `/api/find-user/${e.target.value}/`
+            let URL = `/api/find-user/${e}/`
             fetch(URL)
                 .then(res => res.json())
                 .then(res => {
 
-                    let optionHTML = res.map((item, index)=>{
-                        return <div key={index} onClick={()=>{ setOptions(null); addMemberID(customKey, item.id, item.username)}}>{item.username}</div>
+                    let tempOption = []
+                    res.forEach((item)=>{
+                        if(!existingMembers.includes(item.username)){
+                            tempOption.push(item.username)
+                        }
                     })
 
-                    setOptions(optionHTML)
+                    let tempOptionUsernames = {}
+                    res.forEach((item)=>{
+                        tempOptionUsernames[item.username] = item.id
+                    })
+
+                    setOptions(tempOption)
+                    setOptionUsernames((prevState)=>({...prevState, ...tempOptionUsernames}))
                 })
 
         } else {
-            setOptions(null)
+            setOptions([])
 
         }
+    }
 
+    const onChangeHandler = (e) =>{
+
+        let listOfIDs = e.map((item)=> optionUsernames[item])
+
+        addMemberID(listOfIDs)
 
     }
 
     return (<div>
-                <input type="text" onChange={onChangeHandler} value={selectedUsername} autoComplete="off"/>
-                {options}
+                <Typeahead id="basic-typeahead-multiple" multiple options={options} onInputChange={onInputChangeHandler} placeholder="Select Members..." onChange={onChangeHandler} />
 
             </div>)
 

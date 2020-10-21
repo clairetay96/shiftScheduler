@@ -2,14 +2,52 @@ import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 
 
-function ShiftInput({ shift_info, onChangeHandler, customKey, removeShiftHandler }){
+function ShiftInput({ shift_info, onChangeHandler, customKey, removeShiftHandler, repeatShift }){
     let [show, setShow] = useState(false)
+    let [checkedValues, setCheckedValues] = useState([])
+
+    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    function onCheckToggle(event) {
+
+        if(checkedValues.includes(event.target.value)){
+            setCheckedValues((prevState)=>{
+                let tempState = [...prevState]
+                let indexSplice = tempState.indexOf(event.target.value)
+                tempState.splice(indexSplice, 1)
+                return tempState
+            })
+
+        } else {
+            setCheckedValues((prevState)=>[...prevState, event.target.value])
+        }
+
+
+
+        event.persist()
+    }
+
+    function createDayOptions(){
+        return days.map((item, index)=>{
+
+            return (<div key={index}>
+                    <input type="checkbox" onChange={onCheckToggle}  value={index} />
+                    <label>Every {item}</label>
+
+                    </div>)
+        })
+
+    }
 
     let hideModal = ()=>setShow(false)
     let showModal = ()=>setShow(true)
 
-    function onRepeatModalSubmit(event){
-        event.preventDefault()
+
+
+    function onRepeatModalSubmit(){
+
+        repeatShift(checkedValues, shift_info.shift_start, shift_info.shift_end, shift_info.workers_required)
+
     }
 
     let RepeatModal = (<Modal size="md" show={show} onHide={hideModal}>
@@ -18,31 +56,13 @@ function ShiftInput({ shift_info, onChangeHandler, customKey, removeShiftHandler
                             </Modal.Header>
                             <Modal.Body>
                                 Repeat...
-                                <form onSubmit={onRepeatModalSubmit}>
-                                   <input type="checkbox" id="monday" name="monday" value="1" />
-                                    <label>Every Monday</label><br />
+                                <div>
 
-                                    <input type="checkbox" id="tuesday" name="tuesday" value="2" />
-                                    <label>Every Tuesday</label><br />
+                                   {createDayOptions()}
 
-                                    <input type="checkbox" id="wednesday" name="wednesday" value="3" />
-                                    <label>Every Wednesday</label><br />
+                                    <button onClick={onRepeatModalSubmit} type="button">Submit</button>
 
-                                    <input type="checkbox" id="thursday" name="thursday" value="4" />
-                                    <label>Every Thursday</label><br />
-
-                                    <input type="checkbox" id="friday" name="friday" value="5" />
-                                    <label>Every Friday</label><br />
-
-                                    <input type="checkbox" id="saturday" name="saturday" value="6" />
-                                    <label>Every Saturday</label><br />
-
-                                    <input type="checkbox" id="sunday" name="sunday" value="0" />
-                                    <label>Every Sunday</label><br />
-
-                                    <input type="submit" />
-
-                                </form>
+                                </div>
 
                             </Modal.Body>
 

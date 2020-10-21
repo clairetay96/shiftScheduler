@@ -17,7 +17,6 @@ urlpatterns = [
 	path('periods/<int:id>/', views.PeriodViewWrite.as_view()),
 	path('shifts/<int:id>/', views.ShiftViewWrite.as_view()),
 	path('shifts/', views.ShiftView.as_view()),
-	# path('groups/<>/periods/<>/'),
 	# path('groups/<>/periods/<>/all-preferences/'),
 	path('groups/<int:group_id>/periods/<int:period_id>/indiv-preferences/', views.IndivUserPreferenceView.as_view()),
 	# path('groups/<>/periods/<>/shifts/<>/'),

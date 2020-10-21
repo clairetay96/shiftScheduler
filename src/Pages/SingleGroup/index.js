@@ -22,9 +22,6 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
         setShow(true)
     }
 
-    //get periods and related shifts of group. add to redux store - redux thunk
-
-
     //deleteGroup functionality - redux thunk
 
     function deleteGroupOnClick(){
@@ -48,7 +45,7 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
                     {userGroups[props.match.params.id].is_admin ?
                         <div>
                         <div onClick={showAddMember}>Add member</div>
-                    <AddMember show={show} hideAddMember={hideAddMember} groupID={props.match.params.id} />
+                    <AddMember show={show} hideAddMember={hideAddMember} groupID={props.match.params.id} memberUsernames={userGroups[props.match.params.id].members.map((item)=>item.username)}/>
 
                     </div>:
                     null}

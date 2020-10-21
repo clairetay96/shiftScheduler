@@ -1,12 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 
 function SinglePeriodRow({ period_info, is_admin }){
 
     return <div>
 
-                {period_info.period_start} to {period_info.period_end}
+                {moment(period_info.period_start).format("DD/MM/YY ddd")} to {moment(period_info.period_end).format("DD/MM/YY ddd")}
 
 
                 {period_info.published ?
