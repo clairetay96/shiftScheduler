@@ -43,10 +43,6 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
                         <AddPeriod />
                     </Route>
 
-                    <Route path="/groups/:group_id/periods/:period_id/edit-preference">
-                       {/*Update preference*/}
-                    </Route>
-
                     <Route path="/groups/:group_id/periods/:period_id/edit">
                         <SinglePeriodEdit />
                     </Route>

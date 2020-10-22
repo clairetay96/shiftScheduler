@@ -54,8 +54,6 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
 
                 }
 
-
-
                 start.add(7, 'days')
             }
 

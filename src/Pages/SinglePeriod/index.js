@@ -1,16 +1,50 @@
-import React, { useState }from 'react'
+import React, { useState, useEffect }from 'react'
 import { Link, withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { addPreference } from '../../redux/action-creators'
 import Cookies from 'js-cookie'
 
-function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
+//page for group members to submit shift preferences
+function SinglePeriod({userGroups, userShifts, addPreference, userID, ...props}) {
     let group_id = props.match.params.group_id
     let period_id = props.match.params.period_id
     let history = useHistory()
 
+    let [periodData, setPeriodData] = useState(null)
     let [blockedOut, setBlockedOut] = useState([])
+    let [preferenceID, setPreferenceID] = useState(null)
     let [preferred, setPreferred] = useState([])
+
+    //set blockedOut and preferred if they exist.
+    useEffect(()=>{
+        //check if user exists in userpreference_set
+
+        if(userGroups[group_id]){
+            let chosenPeriod;
+            for(let i=0;i < userGroups[group_id]['periods'].length; i++){
+                if(userGroups[group_id]['periods'][i].id==period_id){
+                    chosenPeriod = userGroups[group_id]['periods'][i]
+                    setPeriodData(chosenPeriod)
+                    break
+                }
+            }
+
+            for(let j=0;j<chosenPeriod['userpreference_set'].length;j++){
+                if(chosenPeriod['userpreference_set'][j].user==userID){
+                    setPreferenceID(chosenPeriod['userpreference_set'][j].id)
+
+                    setPreferred(chosenPeriod['userpreference_set'][j].preferred_shifts.map(item=>item.id))
+
+                    setBlockedOut(chosenPeriod['userpreference_set'][j].blocked_out_shifts.map(item=>item.id))
+                    break
+
+                }
+            }
+        }
+
+
+
+    }, [userGroups])
 
     function submitShiftPreferenceHandler(event) {
         event.preventDefault()
@@ -23,10 +57,9 @@ function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
 
         let token = Cookies.get('csrftoken')
 
-        addPreference(token, requestBody, group_id)
+        addPreference(token, requestBody, group_id, preferenceID)
 
         history.push(`/groups/${group_id}`)
-
 
     }
 
@@ -68,23 +101,15 @@ function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
 
 
     if(userGroups[group_id]){
-        let periodData;
 
-        for(let i=0;i < userGroups[group_id]['periods'].length; i++){
-            if(userGroups[group_id]['periods'][i].id==period_id){
-                periodData = userGroups[group_id]['periods'][i]
-                break
-            }
-        }
-
-        if(!userGroups[group_id].published){
+        if(periodData&&!periodData.published){
 
             let shifts_for_preferred = periodData.shift_set.map((item, index)=>{
-                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkPreferred(event, item.id)}}/> {item.shift_start} to {item.shift_end}</div>
+                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkPreferred(event, item.id)}} defaultChecked={preferred.includes(item.id)} /> {item.shift_start} to {item.shift_end}</div>
             })
 
             let shifts_for_blocked_out = periodData.shift_set.map((item, index)=>{
-                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkBlockedOut(event, item.id)}} /> {item.shift_start} to {item.shift_end}</div>
+                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkBlockedOut(event, item.id)}} defaultChecked={blockedOut.includes(item.id)}/> {item.shift_start} to {item.shift_end}</div>
             })
 
             return <div>
@@ -112,7 +137,7 @@ function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
 
         } else {
 
-            return <div>Show all shifts table.</div>
+            return <div>You cannot submit preferences once a period has been published.</div>
 
         }
 
@@ -131,7 +156,8 @@ function SinglePeriod({userGroups, userShifts, addPreference, ...props}) {
 const mapStateToProps = (state) => {
     return {
         userGroups: state.appActions.userGroups,
-        userShifts: state.appActions.userShifts
+        userShifts: state.appActions.userShifts,
+        userID: state.authActions.userID
     }
 }
 

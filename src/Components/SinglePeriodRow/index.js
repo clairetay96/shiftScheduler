@@ -16,7 +16,7 @@ function SinglePeriodRow({ period_info, is_admin }){
 
 
                    ( period_info.preference_submitted ?
-                        <Link to={`/groups/${period_info.work_group}/periods/${period_info.id}/edit-preference`}><button>Edit Preference </button></Link> :
+                        <Link to={`/groups/${period_info.work_group}/periods/${period_info.id}/`}><button>Edit Preference </button></Link> :
 
                         <Link to={`/groups/${period_info.work_group}/periods/${period_info.id}/`}><button>Submit  Preference </button></Link>) }
 

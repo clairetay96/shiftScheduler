@@ -59,6 +59,8 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
                         let tempShiftStart = removeTimeZone(item.shift_start)
                         let tempShiftEnd = removeTimeZone(item.shift_end)
 
+                        item.users = item.users.map((item)=>item.id)
+
                         tempShiftSet.push({...item, shift_start: tempShiftStart, shift_end: tempShiftEnd})
                     })
 
@@ -100,6 +102,8 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
     function addShiftClickHandler(newVals){
 
         newVals['period'] = parseInt(period_id)
+        console.log(newVals)
+        console.log(period.shift_set)
 
         setPeriod((prevState)=>{
             let newTempState = {...prevState}
@@ -152,13 +156,10 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
             periodUpdateReqBody['published'] = period.published
         }
 
-        console.log("delete shifts", shiftsToDelete)
-        console.log("shifts to update", shiftsToUpdate)
-        console.log("shifts to add", shiftsToAdd)
-        console.log(periodUpdateReqBody)
-
         //redux thunk
-        updatePeriod(token, group_id, periodUpdateReqBody, shiftsToUpdate, shiftsToDelete, shiftsToAdd)
+        updatePeriod(token, periodUpdateReqBody, shiftsToUpdate, shiftsToDelete, shiftsToAdd)
+
+        history.push(`/groups/${group_id}`)
 
 
 

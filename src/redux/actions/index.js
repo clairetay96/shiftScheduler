@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, GET_GROUPS, GET_SHIFTS, GET_NOTIFS, CREATE_GROUP, UPDATE_GROUP, DELETE_GROUP, ADD_PERIOD, DELETE_PERIOD, UPDATE_PREFERENCE } from '../constants/ActionTypes'
+import { LOG_IN, LOG_OUT, GET_GROUPS, GET_SHIFTS, GET_NOTIFS, CREATE_GROUP, UPDATE_GROUP, DELETE_GROUP, ADD_PERIOD, UPDATE_PERIOD, DELETE_PERIOD, UPDATE_PREFERENCE } from '../constants/ActionTypes'
 
 export const logIn = (userCred) => {
     return {type: LOG_IN, userCred}
@@ -24,13 +24,19 @@ export const deleteGroupDispatch = (group_id) => {
     return { type: DELETE_GROUP, group_id }
 }
 
+
 export const createPeriodDispatch = (newPeriod) => {
     return {type: ADD_PERIOD, newPeriod}
+}
+
+export const updatePeriodDispatch = (updatedPeriod) => {
+    return {type: UPDATE_PERIOD, updatedPeriod}
 }
 
 export const deletePeriodDispatch = (periodData) => {
     return { type: DELETE_PERIOD, periodData }
 }
+
 
 export const getShifts = (allShifts) => {
     return {type: GET_SHIFTS, allShifts}

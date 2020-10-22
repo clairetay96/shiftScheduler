@@ -1,4 +1,4 @@
-import { logIn, logOut, getGroups, createGroup, updateGroupDispatch, deleteGroupDispatch, createPeriodDispatch, deletePeriodDispatch, getShifts, updatePreferenceSubmitted } from '../actions'
+import { logIn, logOut, getGroups, createGroup, updateGroupDispatch, deleteGroupDispatch, createPeriodDispatch,updatePeriodDispatch, deletePeriodDispatch, getShifts, updatePreferenceSubmitted } from '../actions'
 import Cookies from 'js-cookie'
 
 
@@ -285,7 +285,7 @@ export const addPeriodDispatch = (token, requestBody) => {
     }
 }
 
-export const updatePeriod = (token, group_id, periodEdit, shiftEdit, shiftDel, shiftAdd) => {
+export const updatePeriod = (token, periodEdit, shiftEdit, shiftDel, shiftAdd) => {
     return async (dispatch) =>{
         try {
 
@@ -374,8 +374,8 @@ export const updatePeriod = (token, group_id, periodEdit, shiftEdit, shiftDel, s
                 })
                 .then(res=>{
                     if(res){
-                        console.log(res)
-                        //dispatch redux action
+                        console.log(res, "inside update period action creator")
+                        dispatch(updatePeriodDispatch(res))
                     }
                 })
                 .catch(err => {
@@ -424,21 +424,41 @@ export const deletePeriod = (token, period_id, group_id) => {
     }
 }
 
-export const addPreference = (token, requestBody, group_id) => {
+export const addPreference = (token, requestBody, group_id, pref_id) => {
 
     return async (dispatch) => {
         try {
-            let addPrefURL = `/api/groups/${group_id}/periods/${requestBody.period}/indiv-preferences/`
+            let addPrefURL;
+            let requestOptions;
 
-            let requestOptions = {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'X-CSRFToken': token
-                },
-                body: JSON.stringify(requestBody)
+            if(pref_id){
+                addPrefURL = `/api/userpreferences/${pref_id}/`
+                requestOptions = {
+                    method: "PUT",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        'X-CSRFToken': token
+                    },
+                    body: JSON.stringify(requestBody)
+                }
+
+            } else {
+
+                addPrefURL = `/api/groups/${group_id}/periods/${requestBody.period}/indiv-preferences/`
+                requestOptions = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        'X-CSRFToken': token
+                    },
+                    body: JSON.stringify(requestBody)
+                }
+
             }
+
+
 
             fetch(addPrefURL, requestOptions)
                 .then(res=>{
@@ -451,7 +471,7 @@ export const addPreference = (token, requestBody, group_id) => {
                 })
                 .then(res=>{
                     if(res){
-                        dispatch(updatePreferenceSubmitted({period_id: requestBody.period, group_id}))
+                        dispatch(updatePreferenceSubmitted({period_id: requestBody.period, group_id, pref_id, new_preference: res}))
                     }
                 })
                 .catch(err=>{

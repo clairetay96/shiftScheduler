@@ -32,6 +32,20 @@ const appActions = (
             updateGroups1[action.newPeriod.work_group].periods.push(action.newPeriod)
             return {...state, userGroups: updateGroups1}
 
+        case "UPDATE_PERIOD":
+            let updateGroups4 = {...state.userGroups}
+
+            let groupPeriod = updateGroups4[action.updatedPeriod.work_group].periods
+
+            for(let i=0;i<groupPeriod.length; i++){
+                if(groupPeriod[i].id==action.updatedPeriod.id){
+                    updateGroups4[action.updatedPeriod.work_group].periods[i] = {...updateGroups4[action.updatedPeriod.work_group].periods[i],...action.updatedPeriod}
+
+                }
+            }
+
+            return {...state, userGroups: updateGroups4}
+
         case "DELETE_PERIOD":
 
             let updateGroups3 = {...state.userGroups}
@@ -54,12 +68,28 @@ const appActions = (
             return state
 
         case "UPDATE_PREFERENCE":
+
             let updateGroups2 = {...state.userGroups}
             let required_periods = updateGroups2[action.periodData.group_id].periods
 
             for(let i=0; i < required_periods.length ; i ++) {
                 if (required_periods[i].id == action.periodData.period_id){
                     updateGroups2[action.periodData.group_id].periods[i].preference_submitted = true
+
+
+                    if(action.periodData.pref_id){
+                        //loop through user preferences to find match
+                        for(let j=0;j<updateGroups2[action.periodData.group_id].periods[i].userpreference_set.length;j++){
+                            if(updateGroups2[action.periodData.group_id].periods[i].userpreference_set[j].id==action.periodData.pref_id){
+                                updateGroups2[action.periodData.group_id].periods[i].userpreference_set[j] = action.periodData.new_preference
+                            }
+                        }
+
+
+                    } else {
+                        //push new preference in
+                        updateGroups2[action.periodData.group_id].periods[i].userpreference_set.push(action.periodData.new_preference)
+                    }
                     break
                 }
             }

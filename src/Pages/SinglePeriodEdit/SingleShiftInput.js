@@ -34,7 +34,8 @@ function SingleShiftInput({ shiftOnChangeHandler, index, shiftInfo, deleteShiftH
                 </td>
 
                 <td>
-                <Typeahead id="basic-typeahead-multiple" multiple options={Object.values(groupMembers)} onChange={onChangeHandler} placeholder="Select Members..." selected={shiftInfo.users.map((item)=>groupMembers[item])} />
+
+                <Typeahead id="basic-typeahead-multiple" multiple options={Object.values(groupMembers)} onChange={onChangeHandler} placeholder="Select Members..." selected={shiftInfo.users.map((item)=> groupMembers[item])} />
                 </td>
 
                 <td>
