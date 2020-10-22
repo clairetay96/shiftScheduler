@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { signUpAPI } from '../../redux/action-creators'
@@ -7,6 +7,7 @@ import './index.css'
 
 const SignUpPage = ({ loggedIn, signUpAPI }) => {
     let history = useHistory()
+    let [message, setMessage] = useState("")
 
     function onSubmitHandler(event){
         event.preventDefault()
@@ -19,13 +20,18 @@ const SignUpPage = ({ loggedIn, signUpAPI }) => {
 
         signUpAPI(requestBody)
             .then(res => {
-                history.push("/")
+                if(res){
+                    history.push("/")
+                } else {
+                    setMessage("Invalid input. Please try again.")
+                }
+
             })
 
     }
 
 
-    return <div>
+    return <div className="signup-page">
                 <h3>Sign up</h3>
                 <div>Already have an account? <Link to="/login">Log in</Link>.</div>
                 <div>
@@ -36,6 +42,7 @@ const SignUpPage = ({ loggedIn, signUpAPI }) => {
                         <input type="password" name="Password2" placeholder="Confirm password"/>
                         <input type="submit" />
                     </form>
+                    {message}
                 </div>
             </div>
 

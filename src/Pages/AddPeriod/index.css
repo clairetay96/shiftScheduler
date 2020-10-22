@@ -1,0 +1,103 @@
+.add-period-page {
+	margin: 10px 30px;
+}
+
+.period-dates {
+	margin: 15px 0;
+}
+
+.period-dates > table {
+	width: 40%;
+}
+
+td {
+	padding-top: 5px;
+}
+
+.add-shift {
+	display: flex;
+	justify-content: flex-end;
+	max-width: 800px;
+	width: 95%;
+	margin-top: 10px;
+}
+
+.add-shift > button {
+	background-color: rgba(0,0,0,0);
+	border: none;
+
+}
+
+.add-shift > button:hover {
+	text-decoration: underline;
+
+}
+
+.shift-input-card {
+	min-width: 600px;
+	max-width: 800px;
+	background-color: lightblue;
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+	margin: 5px 0;
+}
+
+.shift-input-card > * {
+	width: 60%;
+}
+
+.shift-input-options {
+	display: flex;
+	height: 50px;
+	justify-content: flex-end;
+	align-items: flex-end;
+}
+
+.shift-input-options > button {
+	margin-left: 8px;
+	border: none;
+	background-color: rgba(250,250,250,1);
+
+}
+
+.delete-shift-button:hover {
+	background-color: darkred;
+	color: white;
+}
+
+.shift-input-options > button:hover {
+	border: 0.5px solid black;
+}
+
+.day-options {
+	margin: 20px 0;
+}
+
+.day-label {
+	margin-left: 20px;
+	font-size: 110%;
+}
+
+.day-checkbox {
+	transform: scale(2);
+	margin-left: 25px;
+}
+
+.submit-repeat-shifts {
+	background-color: lightgray;
+	border: none;
+	padding: 5px 8px;
+	margin: 0 auto;
+}
+
+.repeat-submit-div {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.submit-repeat-shifts:hover {
+	background-color: lightgray;
+	border: 1px solid black;
+}

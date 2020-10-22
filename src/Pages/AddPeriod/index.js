@@ -6,6 +6,8 @@ import { addPeriodDispatch } from '../../redux/action-creators'
 import ShiftInput from './ShiftInput'
 import moment from 'moment'
 
+import './index.css'
+
 function AddPeriod ({ addPeriodDispatch,...props }) {
     let history = useHistory()
     let [shiftInfo, setShiftInfo] = useState([{shift_start: "", shift_end: "",workers_required: ""}])
@@ -170,19 +172,38 @@ function AddPeriod ({ addPeriodDispatch,...props }) {
         setPeriodStart(event.target.value)
     }
 
-    return (<div>
+    return (<div className="add-period-page">
 
                 <h1>Add Period</h1>
                 <form onSubmit={addPeriodForm}>
+                    <div className="period-dates">
+                    <table>
+                    <tbody>
+                    <tr>
+                    <td>Period Start:</td>
+                    <td>
+                    <input type="datetime-local" value={periodStart} onChange={onChangePeriodStart} name="startDate"/>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>Period End:</td>
+                    <td><input type="datetime-local" value={periodEnd} onChange={onChangePeriodEnd} name="endDate"/></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    </div>
 
-                    Start Date: <input type="datetime-local" value={periodStart} onChange={onChangePeriodStart} name="startDate"/>
-                    End Date: <input type="datetime-local" value={periodEnd} onChange={onChangePeriodEnd} name="endDate"/>
+                    <div>
+                        <div>
+                        <h3>Shifts</h3>
+                        </div>
 
-                    Shifts:
+                        {createShiftUI()}
 
-                    {createShiftUI()}
-
-                    <button type="button" onClick={addShiftInput}>Add another shift</button>
+                        <div className="add-shift">
+                        <button type="button" className="add-shift-button" onClick={addShiftInput}>Add another shift</button>
+                        </div>
+                    </div>
 
 
 

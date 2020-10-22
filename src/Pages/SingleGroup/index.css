@@ -1,0 +1,72 @@
+.singlegroup-page {
+	margin: 10px 30px;
+}
+
+.group-details {
+	display: flex;
+	padding: 10px 0 20px;
+	width: 85%;
+}
+
+.group-details > * {
+	width: 50%;
+	min-width: 300px;
+	padding: 0 5% 0 0;
+	max-height: 300px;
+	overflow: scroll;
+}
+
+.group-details > *:last-child {
+	border-left: 1px solid gray;
+	padding: 0 25px;
+
+}
+
+.delete-group {
+	border-top: 1px solid gray;
+	width: 85%;
+	padding: 10px 0;
+}
+
+.delete-group > * {
+	margin: 10px 0;
+}
+
+.delete-button {
+	background-color: rgba(0,0,0,0);
+	border: 1px solid black;
+	padding: 10px 15px;
+
+}
+
+.delete-button:hover {
+	background-color: red;
+	border-color: red;
+	color: white;
+	transition: 0.2s;
+}
+
+.member-header {
+	display: flex;
+	align-items: center;
+	width: 90%;
+}
+
+.member-header > div > div  {
+	margin: 0 0 0 5px;
+	display: flex;
+	justify-content: center;
+	position: relative;
+	top: -2px;
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+.member-header > div > div:hover {
+	opacity: 1;
+}
+
+.period-header {
+	display: flex;
+	justify-content: space-between;
+}

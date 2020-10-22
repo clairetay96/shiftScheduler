@@ -1,0 +1,133 @@
+.edit-period-page {
+	margin: 10px 30px;
+}
+
+.shift-table {
+	width: 85%;
+	min-width: 850px;
+}
+
+.shift-table tr {
+	border-bottom: 0.5px solid lightgray;
+}
+
+.edit-shift-header {
+	margin: 10px 0 0;
+	display: flex;
+	width: 85%;
+	min-width: 850px;
+	align-items: center;
+	justify-content: space-between;
+	border-top: 1px solid gray;
+}
+
+.edit-shift-header-left {
+	display: flex;
+}
+
+.add-shift-button {
+	margin-left: 10px;
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+.add-shift-button:hover{
+	opacity: 1;
+}
+
+.view-preference {
+	cursor: pointer;
+	width: 50%;
+	max-width: 280px;
+	margin-bottom: 10px;
+}
+
+.view-preference:hover {
+	text-decoration: underline;
+
+}
+
+.delete-period-div{
+	border-top: 0.5px solid gray;
+	width: 85%;
+	min-width: 850px;
+	margin: 5px 0;
+	padding: 10px 0;
+}
+
+.delete-period-div > button {
+	padding: 10px 30px;
+	background-color: white;
+	border: 1px solid darkred;
+	margin: 5px 0 0 10px;
+}
+
+.delete-period-div > button:hover {
+	background-color: darkred;
+	color: white;
+	transition: 0.3s;
+}
+
+.typeahead-field {
+	max-height: 300px;
+	overflow: scroll;
+}
+
+
+.auto-assign-div > button {
+	border: none;
+	background-color: lightblue;
+	padding: 5px 10px;
+	margin: 10px 5px;
+}
+
+.auto-assign-div > button:hover {
+	background-color: rgba(1, 25, 54, 1);
+	color: white;
+	transition: 0.2s;
+}
+
+.publish-save-div {
+	margin: 5px 0;
+}
+
+.publish-save-div > button {
+	padding: 10px 20px;
+	margin: 10px 5px 10px;
+	background-color: lightgray;
+	border: none;
+}
+
+.publish-save-div > button:hover {
+	outline: 1px solid black;
+}
+
+.member-preference-table > * {
+	border: 0.5px solid gray;
+}
+
+.member-preference-table td, .member-preference-table th {
+	padding: 5px 7px;
+}
+
+.input-field-div {
+	margin: 8px 5px;
+}
+
+.add-shift-button-div {
+	margin: 8px 5px;
+}
+
+.add-shift-button-div > button {
+	padding: 10px;
+	border: none;
+	background-color: lightgray;
+}
+
+.add-shift-button-div > button:hover {
+	outline: 1px solid black;
+}
+
+.delete-shift-button {
+	border: none;
+}

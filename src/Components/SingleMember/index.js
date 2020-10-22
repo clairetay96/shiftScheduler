@@ -2,6 +2,7 @@ import React from 'react'
 import Cookies from 'js-cookie'
 import { connect } from 'react-redux'
 import { updateGroup } from '../../redux/action-creators'
+import './index.css'
 
 
 
@@ -21,9 +22,9 @@ function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateG
 
     let showRemoveButton = isAdmin && loggedInUserID!==userID
 
-    return (<div>
+    return (<div className="member-row">
                 <div>{username}</div>
-                {showRemoveButton ? <button type="button" onClick={removeMemberFromGroup}>Remove from group</button> : null}
+                {showRemoveButton ? <button type="button" className="remove-member-button" onClick={removeMemberFromGroup}>Remove from group</button> : null}
             </div>)
 
 }

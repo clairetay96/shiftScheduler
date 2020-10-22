@@ -35,7 +35,7 @@ export const signUpAPI = (requestBody) => {
     return async (dispatch) => {
         try {
             let signUpURL = "/api/rest-auth/registration/"
-            fetch(signUpURL, {
+            let signUpRequest = await fetch(signUpURL, {
                 method:"POST",
                 headers: {
                     Accept: "application/json",
@@ -45,19 +45,21 @@ export const signUpAPI = (requestBody) => {
             })
                 .then(res => {
                     if(res.status!==201){
-                        return res
-                    } else {
-                        console.log("All good")
-                        dispatch(logIn())
                         return null
+                    } else {
+                        return res.json()
                     }
                 })
                 .then(res => {
-                    if(res!==null){
-                        console.log(res.statusText, res)
+                    if(res){
+                        console.log(res)
+                        dispatch(logIn(res.user))
                     }
+                    return res
                 })
                 .catch(err => console.log(err.message))
+
+            return signUpRequest
 
         } catch (err) {
             console.log(err, "Err in signUpAPI")
@@ -143,7 +145,7 @@ export const createNewGroup = (token, requestBody) => {
         try {
             let newGroupURL = "/api/groups/"
 
-            fetch(newGroupURL, {
+            let newGroup = await fetch(newGroupURL, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -156,8 +158,11 @@ export const createNewGroup = (token, requestBody) => {
                 .then(res=>{
 
                     dispatch(createGroup(res))
+                    return res
                 })
                 .catch(err=>console.log(err, "help"))
+
+            return newGroup
 
 
         } catch (err) {
@@ -219,7 +224,7 @@ export const deleteGroup = (token, group_id) => {
     return async (dispatch) => {
         try {
 
-            let deleteGroupURL = "/api/groups/"+group_id
+            let deleteGroupURL = "/api/groups/"+group_id+"/"
             let requestOptions = {
                 method: "DELETE",
                 headers: {

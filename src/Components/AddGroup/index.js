@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import useHistory from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import Cookies from 'js-cookie'
 
 import { createNewGroup } from '../../redux/action-creators'
 import MemberInput from './MemberInput'
 
+import './index.css'
+
 
 const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
     let [memberList, setMemberList] = useState([{user_id: null, username: ""}])
     let [groupName, setGroupName] = useState("")
+    let history = useHistory()
 
     //make a new group
     function makeNewGroup(event) {
@@ -22,7 +25,12 @@ const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
         }
         let token = Cookies.get('csrftoken')
 
-        createNewGroup(token, requestBody)
+        let newGroup = createNewGroup(token, requestBody)
+                            .then(res=> {
+                                hideAddGroup()
+                                history.push("/groups/"+res.id)
+                            })
+
     }
 
     function addMemberID(listOfIDs) {
@@ -39,13 +47,13 @@ const AddGroup = ({ show, hideAddGroup, createNewGroup }) => {
                     <Modal.Title>Create new group</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form onSubmit={makeNewGroup}>
+                    <form onSubmit={makeNewGroup} className="add-group-form">
 
-                            <input type="text" value={groupName} onChange={onChangeGroupName} placeholder="Group Name" autoComplete="off"/>
+                            <input type="text" value={groupName} onChange={onChangeGroupName} placeholder="Group Name" autoComplete="off" className="group-name-input"/>
 
-                            <div>
+                            <div className="member-input-div">
 
-                            Members: (type in their username)
+                            <div>Find users by username:</div>
 
                             <MemberInput addMemberID={addMemberID} existingMembers={[]} />
 

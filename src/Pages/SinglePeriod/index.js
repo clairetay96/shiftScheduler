@@ -3,6 +3,8 @@ import { Link, withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { addPreference } from '../../redux/action-creators'
 import Cookies from 'js-cookie'
+import moment from 'moment'
+import './index.css'
 
 //page for group members to submit shift preferences
 function SinglePeriod({userGroups, userShifts, addPreference, userID, ...props}) {
@@ -24,6 +26,14 @@ function SinglePeriod({userGroups, userShifts, addPreference, userID, ...props})
             for(let i=0;i < userGroups[group_id]['periods'].length; i++){
                 if(userGroups[group_id]['periods'][i].id==period_id){
                     chosenPeriod = userGroups[group_id]['periods'][i]
+                    chosenPeriod.shift_set.sort((a, b)=>{
+                        if(moment(a).isBefore(b)){
+                            return -1
+                        } else {
+                            return 1
+                        }
+                    })
+
                     setPeriodData(chosenPeriod)
                     break
                 }
@@ -65,6 +75,7 @@ function SinglePeriod({userGroups, userShifts, addPreference, userID, ...props})
 
     function checkPreferred(event, shift_id){
         setPreferred((prevState)=>{
+
             let newState=[...prevState]
 
             if(newState.includes(shift_id)){
@@ -105,28 +116,28 @@ function SinglePeriod({userGroups, userShifts, addPreference, userID, ...props})
         if(periodData&&!periodData.published){
 
             let shifts_for_preferred = periodData.shift_set.map((item, index)=>{
-                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkPreferred(event, item.id)}} defaultChecked={preferred.includes(item.id)} /> {item.shift_start} to {item.shift_end}</div>
+                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkPreferred(event, item.id)}} defaultChecked={preferred.includes(item.id)} /> {moment(item.shift_start).format("DD/MM/YY ddd h.mm a")} to {moment(item.shift_end).format("DD/MM/YY ddd h.mm a")}</div>
             })
 
             let shifts_for_blocked_out = periodData.shift_set.map((item, index)=>{
-                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkBlockedOut(event, item.id)}} defaultChecked={blockedOut.includes(item.id)}/> {item.shift_start} to {item.shift_end}</div>
+                return <div key={index}> <input type="checkbox" value={item.id} onChange={(event)=>{checkBlockedOut(event, item.id)}} defaultChecked={blockedOut.includes(item.id)}/> {moment(item.shift_start).format("DD/MM/YY ddd h.mm a")} to {moment(item.shift_end).format("DD/MM/YY ddd h.mm a")}</div>
             })
 
             return <div>
                 <h2>{userGroups[group_id].name}</h2>
 
-                <h4>Shifts from {periodData.period_start} to {periodData.period_end}</h4>
+                <h3>Shifts from {moment(periodData.period_start).format("DD/MM/YY ddd")} to {moment(periodData.period_end).format("DD/MM/YY ddd")}</h3>
 
                 <div>
                     <form onSubmit={submitShiftPreferenceHandler}>
-                        Preferred Shifts:
+                        <h4>Preferred Shifts:</h4>
                         {shifts_for_preferred}
 
 
-                        Blocked out shifts:
+                        <h4>Blocked out shifts:</h4>
                         {shifts_for_blocked_out}
 
-                        <input type="submit" />
+                        <input type="submit" style={{marginTop: "10px"}} />
                     </form>
                 </div>
 

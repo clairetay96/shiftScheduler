@@ -53,3 +53,7 @@
 .logout {
 	cursor: pointer;
 }
+
+.logout:hover{
+	text-decoration: underline;
+}

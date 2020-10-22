@@ -29,7 +29,7 @@ const LogInPage = ({ logInAPI }) => {
 
 
     }
-    return <div>
+    return <div className="login-page">
                 <h3>Login</h3>
                 <div>
                     Don't have an account yet? <Link to="/signup">Sign up</Link>.

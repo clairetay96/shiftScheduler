@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { deletePeriod, updatePeriod } from '../../redux/action-creators'
+import assignShifts from './utility.js'
 
 
 import SingleShiftInput from './SingleShiftInput'
 import ShiftPreferenceModal from './ShiftPreferenceModal'
 import AddShiftModal from './AddShiftModal'
+import { BiPlus } from 'react-icons/bi'
+
+import './index.css'
 
 import Cookies from 'js-cookie'
 import moment from 'moment'
@@ -224,13 +228,20 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
 
     }
 
+    function automaticShiftAssign(){
+
+        let newShiftSet = assignShifts(groupMembers, period.userpreference_set, period.shift_set)
+
+        setPeriod((prevState)=>({...prevState, shift_set:newShiftSet}))
+    }
+
 
 
     if (Object.keys(userGroup).length > 0){
 
         if(userGroup.is_admin){
 
-            return (<div>
+            return (<div className="edit-period-page">
                     <ShiftPreferenceModal show={showShiftPreference} onHideFunction={()=>{setShowShiftPreference(false)}} memberPreference={period.userpreference_set} groupMembers={groupMembers} />
 
                     <AddShiftModal show={showAddShift} onHideFunction={()=>{setShowAddShift(false)}} addShiftFunction={addShiftClickHandler} period_id={period.id} groupMembers={groupMembers} groupMembersByUsername={groupMembersByUsername}/>
@@ -239,9 +250,8 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
                         <h2>Edit Period for {userGroups[group_id].name}</h2>
 
                         <div>
-                        <h4>Edit Period</h4>
 
-                        <table>
+                        <table style={{width: '40%', minWidth: '400px'}}>
                             <tbody>
                             <tr>
                                 <td>Start Date:</td>
@@ -259,9 +269,16 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
 
                         </div>
 
-                        <div>
+                        <div className="edit-shift-header">
+                        <div className="edit-shift-header-left">
                         <h4>Edit Shifts </h4>
-                        <button onClick={()=>{setShowAddShift(true)}}>Add Shift</button>
+                        <div onClick={()=>{setShowAddShift(true)}} className="add-shift-button"><BiPlus size={23}/></div>
+                        </div>
+
+                        <div className="auto-assign-div">
+                        <button onClick={automaticShiftAssign}>Automatically assign shifts</button>
+                        </div>
+
                         </div>
 
 
@@ -269,12 +286,12 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
 
 
                             {/*Open Modal*/}
-                            <div onClick={()=>{setShowShiftPreference(true)}}>View member's shift preferences</div>
+                            <div onClick={()=>{setShowShiftPreference(true)}} className="view-preference">View member's shift preferences</div>
 
 
                             <div>
 
-                            <table>
+                            <table className="shift-table">
                                 <thead>
                                     <tr>
                                     <th>Shift start</th>
@@ -290,17 +307,14 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
 
                             </div>
 
-
-
-                            <button>Automatically assign shifts</button>
                         </div>
 
-                        <div>
+                        <div className="publish-save-div">
                             {period.published ? <button type="button" onClick={()=>{savePeriodClickHandler(false)}}>Save & Republish</button> :
                                 <div><button type="button" onClick={()=>{savePeriodClickHandler(false)}}>Save</button><button type="button" onClick={()=>{savePeriodClickHandler(true)}}>Save & Publish</button></div>}
                         </div>
 
-                        <div>
+                        <div className="delete-period-div">
                             <h4>Delete Period</h4>
 
                             {/*To add - open modal to confirm*/}

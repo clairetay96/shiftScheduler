@@ -26,10 +26,10 @@ function SingleShiftInput({ shiftOnChangeHandler, index, shiftInfo, deleteShiftH
             shiftOnChangeHandler(index, "workers", event)
         }
     }
-    console.log(shiftInfoState)
+
 
     if(isNotEmptyObject(groupMembersState) && shiftInfoState.users!==undefined){
-        console.log(shiftInfoState)
+
             return (
                 <tbody>
                 <tr>
@@ -43,10 +43,10 @@ function SingleShiftInput({ shiftOnChangeHandler, index, shiftInfo, deleteShiftH
                 <input type="text" onChange={onChangeHandler} name="workers_required" value={shiftInfoState.workers_required}/>
                 </td>
                 <td>
-                <Typeahead id="basic-typeahead-multiple" multiple options={Object.values(groupMembersState)} onChange={onChangeHandler} placeholder="Select Members..." selected={shiftInfoState.users.map((item)=> groupMembersState[item])} />
+                <Typeahead id="basic-typeahead-multiple" multiple options={Object.values(groupMembersState)} onChange={onChangeHandler} placeholder="Select Members..." selected={shiftInfoState.users.map((item)=> groupMembersState[item])} className="typeahead-field"/>
                 </td>
                 <td>
-                    <button onClick={()=>{deleteShiftHandler(index)}}>Delete shift</button>
+                    <button className="delete-shift-button" onClick={()=>{deleteShiftHandler(index)}}>Delete shift</button>
                 </td>
                 </tr>
                 </tbody>

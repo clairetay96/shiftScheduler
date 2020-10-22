@@ -1,0 +1,23 @@
+.add-group-form {
+	margin: 20px 10px;
+}
+
+.add-group-form > * {
+	margin: 10px;
+}
+
+.group-name-input {
+	font-size: 30px;
+	padding: 5px 5px 1px 5px;
+	width: 70%;
+	border: none;
+	border-bottom: 1px solid lightgray;
+}
+
+.group-name-input:focus {
+	outline: none;
+}
+
+.member-input-div > * {
+	margin: 5px;
+}

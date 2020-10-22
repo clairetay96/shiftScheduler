@@ -8,6 +8,7 @@ import Cookies from 'js-cookie'
 import { connect } from 'react-redux'
 
 import { updateGroup } from '../../redux/action-creators'
+import './index.css'
 
 
 function AddMember ({ show, hideAddMember, updateGroup, groupID, memberUsernames }) {
@@ -34,14 +35,16 @@ function AddMember ({ show, hideAddMember, updateGroup, groupID, memberUsernames
     }
 
     return (<div>
-            <Modal size="lg" show={show} onHide={hideAddMember}>
+            <Modal size="md" show={show} onHide={hideAddMember}>
                 <Modal.Header closeButton>
                     <Modal.Title> Add Member</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form onSubmit={addNewMemberToGroup}>
+                    <form onSubmit={addNewMemberToGroup} className="add-member-form">
 
-                            Members: (type in their username)
+                            <div>
+                            Find users by username:
+                            </div>
 
                             <MemberInput addMemberID={addMemberID} existingMembers={memberUsernames}/>
 

@@ -40,7 +40,7 @@ function ShiftPreferenceModal({show, onHideFunction, memberPreference, groupMemb
                 </Modal.Header>
 
                 <Modal.Body>
-                    <table>
+                    <table className="member-preference-table">
                         <thead>
                             <tr>
                                 <th>Member</th>

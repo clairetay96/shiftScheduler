@@ -1,0 +1,22 @@
+.member-row {
+	display: flex;
+	width: 80%;
+	justify-content: space-between;
+	padding: 5px;
+	border-bottom: 0.5px solid lightgray;
+
+}
+
+.remove-member-button {
+	background-color: rgba(0,0,0,0);
+	border-radius: 5%;
+	border: 1px solid rgba(1, 25, 54, 1);
+	font-size: 12px;
+	padding: 5px 8px;
+}
+
+.remove-member-button:hover {
+	background-color: rgba(1, 25, 54, 0.8);
+	color: white;
+	transition: 0.3s;
+}

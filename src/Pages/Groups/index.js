@@ -5,6 +5,9 @@ import AddGroup from '../../Components/AddGroup'
 import AddPeriod from '../AddPeriod'
 import SinglePeriod from '../SinglePeriod'
 import SinglePeriodEdit from '../SinglePeriodEdit'
+import { BiPlus } from 'react-icons/bi'
+
+import './index.css'
 
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 
@@ -14,6 +17,7 @@ import { getUserGroups } from '../../redux/action-creators'
 
 
 function Groups({ loggedIn, userGroups, getUserGroups }){
+    let [userGroupsState, setUserGroupsState] = useState([])
 
     //modal functionality - show vs hide
     let [show, setShow] = useState(false)
@@ -33,10 +37,28 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
         }
     }, [])
 
+    useEffect(()=> {
+        if(Object.keys(userGroups).length > 0) {
+            let tempUserGroupsState = [...Object.values(userGroups)]
+            tempUserGroupsState.sort((a, b)=>{
+                if (a.name < b.name){
+                    return -1
+                } else if (a.name > b.name){
+                    return 1
+                }
+                return 0
+            })
+
+            setUserGroupsState(tempUserGroupsState)
+
+        }
+
+    }, [userGroups])
 
 
 
-    return (<div>
+
+    return (<div className="groups-page">
                 <Switch>
 
                     <Route path="/groups/:id/periods/new">
@@ -57,14 +79,18 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
                     </Route>
 
                     <Route path="/groups/">
+
+                        <div className="groups-page-header">
                         <h3>Your Groups</h3>
-
                         <AddGroup show={show} hideAddGroup={hideAddGroup}/>
-                        <div onClick={showAddGroup}>Add a new group</div>
+                        <div onClick={showAddGroup} className="add-group"><BiPlus size={25}/></div>
+                        </div>
 
-                        {Object.values(userGroups).map((item, index)=>{
-                            return <div key={index}><Link to={"/groups/"+item.id}>{item.name}</Link></div>
+                        <div className="groups-list">
+                        {userGroupsState.map((item, index)=>{
+                            return <Link to={"/groups/"+item.id} key={index}><div>{item.name}</div></Link>
                         })}
+                        </div>
                     </Route>
 
                 </Switch>

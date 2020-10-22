@@ -67,11 +67,11 @@ function NavBar({ loggedIn, logOutAPI, username, userID, userGroups }){
                     </div>
 
                     <div className="left-aligned">
+                    <div className="shifts">
+                       <Link to="/">Home</Link>
+                    </div>
                     <div>
                      {groupDropDown}
-                    </div>
-                    <div className="shifts">
-                       <Link to="/"> Your Shifts</Link>
                     </div>
                     </div>
 

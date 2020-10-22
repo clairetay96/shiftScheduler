@@ -1,0 +1,21 @@
+.shift-time{
+	width: 50%;
+	display: flex;
+	justify-content: space-between;
+	margin: 5px 0;
+}
+
+.close-modal-button-div {
+	padding: 10px;
+	display: flex;
+	justify-content: flex-end;
+
+}
+
+.close-modal-button-div > button {
+	padding: 10px;
+	border: none;
+	background-color: lightblue;
+	border-radius: 5%;
+
+}

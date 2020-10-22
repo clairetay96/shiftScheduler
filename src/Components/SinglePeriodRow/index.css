@@ -1,0 +1,21 @@
+.period-row {
+	display: flex;
+	border-bottom: 0.5px solid lightgray;
+	padding: 5px;
+	justify-content: space-between;
+}
+
+.period-button {
+	background-color: rgba(0,0,0,0);
+	border-radius: 5%;
+	border: 1px solid rgba(1, 25, 54, 1);
+	font-size: 12px;
+	padding: 5px 8px;
+	margin-left: 5px;
+}
+
+.period-button:hover {
+	background-color: rgba(1, 25, 54, 0.8);
+	color: white;
+	transition: 0.3s;
+}
