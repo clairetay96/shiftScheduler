@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 import { Calendar, Views } from 'react-big-calendar'
 import localizer from 'react-big-calendar/lib/localizers/moment'
@@ -25,7 +26,7 @@ const Homepage = ({ loggedIn, userShifts })=>{
             setEvents(userShifts.map((item)=>{
                 return {
                     id: item.id,
-                    title: `${item.group_name}  ${moment(item.shift_start).format("h.mm a")}-${moment(item.shift_end).format("h.mm a")}`,
+                    title: `${item.group_name}  ${moment(item.shift_start).format("h.mm a")}-${moment(item.shift_end).format("h.mm a")}: : ${Object.values(item.users.map((item)=>item.username)).join(", ")}`,
                     start: new Date(item.shift_start),
                     end: new Date(item.shift_end),
                     users: item.users,
@@ -74,8 +75,12 @@ const Homepage = ({ loggedIn, userShifts })=>{
 
 
     } else {
-        return (<div>
-                This is the homepage.
+        return (<div className="non-loggedin-homepage">
+                <div className="logo-message">
+                    <div className="logo-font">DELEGO</div>
+                    <div className="message-font">Hassle-free, automated shift assignment.</div>
+                    <div className="logo-message-buttons"><Link to="/login"><button>Log In</button></Link> <Link to="/signup"><button>Sign Up</button></Link></div>
+                </div>
             </div>)
     }
 

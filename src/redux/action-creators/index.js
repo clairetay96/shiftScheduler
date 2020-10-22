@@ -52,7 +52,7 @@ export const signUpAPI = (requestBody) => {
                 })
                 .then(res => {
                     if(res){
-                        console.log(res)
+
                         dispatch(logIn(res.user))
                     }
                     return res

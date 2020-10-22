@@ -57,7 +57,7 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
                     item.shift_set.forEach((item1)=>{
                         eventsList.push({
                             id: item1.id,
-                            title: `${moment(item1.shift_start).format("h.mm a")}-${moment(item1.shift_end).format("h.mm a")}`,
+                            title: `${moment(item1.shift_start).format("h.mm a")}-${moment(item1.shift_end).format("h.mm a")}: ${Object.values(item1.users.map((item)=>item.username)).join(", ")}`,
                             start: new Date(item1.shift_start),
                             end: new Date(item1.shift_end),
                             group_id: props.match.params.id,

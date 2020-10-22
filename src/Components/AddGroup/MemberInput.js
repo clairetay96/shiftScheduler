@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
+import { connect } from 'react-redux'
 
 
-const MemberInput = ({ addMemberID, existingMembers }) => {
+const MemberInput = ({ addMemberID, existingMembers, loggedInUsername }) => {
     let [options, setOptions] = useState([]) //array containing usernames
     let [optionUsernames, setOptionUsernames] = useState({}) //object mapping username to IDs
 
@@ -19,7 +20,7 @@ const MemberInput = ({ addMemberID, existingMembers }) => {
 
                     let tempOption = []
                     res.forEach((item)=>{
-                        if(!existingMembers.includes(item.username)){
+                        if(!existingMembers.includes(item.username)&&item.username!==loggedInUsername){
                             tempOption.push(item.username)
                         }
                     })
@@ -55,4 +56,8 @@ const MemberInput = ({ addMemberID, existingMembers }) => {
 
 }
 
-export default MemberInput
+const mapStateToProps = (state)=>({
+    loggedInUsername: state.authActions.username
+})
+
+export default connect(mapStateToProps)(MemberInput)

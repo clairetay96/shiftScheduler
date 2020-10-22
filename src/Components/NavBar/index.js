@@ -10,7 +10,7 @@ import AddGroup from '../AddGroup'
 
 function NavBar({ loggedIn, logOutAPI, username, userID, userGroups }){
     let history = useHistory()
-    let [groupDropDown, setGroupDropDown] = useState(<DropdownButton title="Groups"><Dropdown.Item>Create new group...</Dropdown.Item></DropdownButton>)
+    let [groupDropDown, setGroupDropDown] = useState(<DropdownButton title="Groups" onSelect={handleSelect}><Dropdown.Item eventKey="makeNew">Create new group...</Dropdown.Item></DropdownButton>)
 
     let [show, setShow] = useState(false)
 
@@ -84,7 +84,7 @@ function NavBar({ loggedIn, logOutAPI, username, userID, userGroups }){
     }
     return (<div className="nav-bar nav-logged-out">
                 <div className="homepage-link">
-                <Link to="/">SHIFTLY</Link>
+                <Link to="/"><div className="shift-logo">DELEGO</div></Link>
                 </div>
                 <div className="login-signup">
                 <Link to="/login">Login</Link> | <Link to="/signup">Sign Up</Link>

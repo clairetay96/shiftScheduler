@@ -14,5 +14,20 @@
 }
 
 .signup-page {
-	margin: 10px 30px;
+	background-image: linear-gradient(rgba(1, 25, 54, 1), black);
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.signup-card {
+	position: relative;
+	top: -80px;
+}
+
+.signup-card *:not(input) {
+	color: white;
+
 }

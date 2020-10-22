@@ -32,6 +32,7 @@ const SignUpPage = ({ loggedIn, signUpAPI }) => {
 
 
     return <div className="signup-page">
+                <div className="signup-card">
                 <h3>Sign up</h3>
                 <div>Already have an account? <Link to="/login">Log in</Link>.</div>
                 <div>
@@ -43,6 +44,7 @@ const SignUpPage = ({ loggedIn, signUpAPI }) => {
                         <input type="submit" />
                     </form>
                     {message}
+                </div>
                 </div>
             </div>
 

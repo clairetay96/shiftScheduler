@@ -1,3 +1,48 @@
 .logged-in-homepage {
 	margin: 10px 30px;
 }
+
+.non-loggedin-homepage {
+	background-image: linear-gradient(rgba(1, 25, 54, 1), black);
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.logo-font {
+	font-family: 'Bebas Neue', cursive;;
+	font-size: 100px;
+	color: white;
+	position: relative;
+	top: -80px;
+}
+
+.message-font {
+	color: white;
+	font-size: 30px;
+	position: relative;
+	top: -80px;
+}
+
+.logo-message-buttons > * > button {
+	border: none;
+	padding: 15px 20px;
+	font-size: 20px;
+	margin-right:5px ;
+	border-radius: 5%;
+	background-color: rgba(0,0,0,0);
+	color:white;
+	border: 0.5px solid white;
+	position: relative;
+	top: -40px;
+
+
+}
+
+.logo-message-buttons > * > button:hover {
+	background-color: white;
+	color: rgba(1, 25, 54, 1);
+	transition: 0.3s;
+}

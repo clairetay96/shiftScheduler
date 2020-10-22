@@ -57,3 +57,8 @@
 .logout:hover{
 	text-decoration: underline;
 }
+
+.shift-logo {
+	font-family: 'Bebas Neue', cursive;
+	font-size: 25px;
+}
