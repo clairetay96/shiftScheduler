@@ -1,0 +1,14 @@
+.signup-form {
+	display: flex;
+	flex-direction: column;
+}
+
+.signup-form > * {
+	margin: 5px 0;
+	width: 220px;
+}
+
+.signup-form > [type="submit"] {
+	margin: 10px 0;
+	width: 100px;
+}

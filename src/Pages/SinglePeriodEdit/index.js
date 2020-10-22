@@ -11,6 +11,11 @@ import AddShiftModal from './AddShiftModal'
 import Cookies from 'js-cookie'
 import moment from 'moment'
 
+
+function isEmptyObject(obj) {
+    return Object.keys(obj).length === 0 && obj.constructor() === Object
+}
+
 //Edit form for admins, populated with period info and with option to edit/assignshifts>publish/delete.
 function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
     let group_id = props.match.params.group_id
@@ -18,7 +23,7 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
     let history = useHistory()
     let token = Cookies.get('csrftoken')
 
-    let [userGroup, setUserGroup] = useState(userGroups[group_id])
+    let [userGroup, setUserGroup] = useState({})
 
     let [period, setPeriod] = useState({ period_start: "", period_end: "", shift_set: []})
     let [deletedShifts, setDeletedShifts] = useState([])
@@ -38,7 +43,11 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
         //set user group
         setUserGroup({...userGroups[group_id]})
 
-        if(userGroups[group_id]){
+
+    }, [userGroups, props.match.params.group_id])
+
+    useEffect(()=>{
+        if(userGroup&&userGroup.id==group_id){
 
             //set period. must trim period and shift times. sort user preferences by submitted at time.
             for(let i=0;i < userGroups[group_id].periods.length; i ++ ){
@@ -59,7 +68,7 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
                         let tempShiftStart = removeTimeZone(item.shift_start)
                         let tempShiftEnd = removeTimeZone(item.shift_end)
 
-                        item.users = item.users.map((item)=>item.id)
+                        item.users = item.users.map((item)=>item.id ? item.id : item)
 
                         tempShiftSet.push({...item, shift_start: tempShiftStart, shift_end: tempShiftEnd})
                     })
@@ -96,14 +105,12 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
             setGroupMembersByUsername(tempGroupMembersUsername)
         }
 
-    }, [userGroups])
+    }, [userGroup])
 
 
     function addShiftClickHandler(newVals){
 
         newVals['period'] = parseInt(period_id)
-        console.log(newVals)
-        console.log(period.shift_set)
 
         setPeriod((prevState)=>{
             let newTempState = {...prevState}
@@ -219,9 +226,9 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
 
 
 
-    if (userGroups[group_id]){
+    if (Object.keys(userGroup).length > 0){
 
-        if(userGroups[group_id].is_admin){
+        if(userGroup.is_admin){
 
             return (<div>
                     <ShiftPreferenceModal show={showShiftPreference} onHideFunction={()=>{setShowShiftPreference(false)}} memberPreference={period.userpreference_set} groupMembers={groupMembers} />
@@ -241,7 +248,6 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
 
                                 <td><input type="datetime-local" onChange={onPeriodStartChangeHandler} value={period.period_start}/></td>
                             </tr>
-
                             <tr>
                                 <td>End Date:</td>
 
@@ -269,7 +275,6 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
                             <div>
 
                             <table>
-
                                 <thead>
                                     <tr>
                                     <th>Shift start</th>
@@ -278,7 +283,6 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
                                     <th>Workers</th>
                                     </tr>
                                 </thead>
-
                             {period.shift_set.map((item, index)=>{
                                 return <SingleShiftInput shiftInfo={item} groupMembers={groupMembers} shiftOnChangeHandler={shiftChangeHandler} deleteShiftHandler={shiftDeleteHandler} index={index} key={index} setPeriod={setPeriod}/>
                             })}

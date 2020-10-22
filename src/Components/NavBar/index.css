@@ -1,13 +1,32 @@
 .nav-bar {
 	width: 100%;
-	height: 30px;
-	background-color: lightgray;
+	height: 50px;
+	background-color: rgba(1, 25, 54, 1);
+	color: white;
 	position: fixed;
+	z-index: 30;
 	top: 0;
 	left: 0;
 	display: flex;
 	align-items: center;
 	padding: 5px 0;
+}
+
+.left-aligned {
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	display: flex;
+	align-items: center;
+}
+
+ .show.dropdown > .dropdown-toggle.btn.btn-primary, .dropdown > .dropdown-toggle.btn.btn-primary {
+	background-color: rgba(0,0,0,0);
+	border: none;
+}
+
+.left-aligned > * {
+	margin: 0 10px;
 }
 
 .nav-bar > * {
@@ -20,7 +39,7 @@
 }
 
 .nav-logged-out {
-	justify-content: flex-end;
+	justify-content: space-between;
 }
 
 .welcome-logout {

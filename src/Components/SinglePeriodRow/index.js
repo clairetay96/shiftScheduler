@@ -11,8 +11,7 @@ function SinglePeriodRow({ period_info, is_admin }){
 
 
                 {period_info.published ?
-
-                    <Link to={`/groups/${period_info.work_group}/periods/${period_info.id}`}><button>See shifts</button></Link> :
+                    null:
 
 
                    ( period_info.preference_submitted ?

@@ -44,6 +44,7 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
 
             userGroups[props.match.params.id].periods.forEach((item)=>{
                 if(item.published){
+
                     item.shift_set.forEach((item1)=>{
                         eventsList.push({
                             id: item1.id,
@@ -55,33 +56,33 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
                 }
 
             })
-            console.log(eventsList)
 
             setEvents(eventsList)
         }
 
-    }, [userGroups])
+    }, [userGroups, props.match.params.id])
 
 
 
     if(userGroups[props.match.params.id]){
         return <div>
-                <h1>{userGroups[props.match.params.id].name}</h1>
+                <h1>Shifts for {userGroups[props.match.params.id].name}</h1>
                 {userGroups[props.match.params.id].is_admin ?
                     <div>
                         <button onClick={deleteGroupOnClick}>Delete Group</button>
                     </div> : null
                 }
+
+                <div style={{height: 550, width: '80%'}}>
+                    <Calendar
+                        localizer={someLocalizer}
+                        events={events}
+                    />
+                </div>
+
                 <div>
 
-                    {userGroups[props.match.params.id].is_admin ?
-                        <div>
-                        <div onClick={showAddMember}>Add member</div>
-                    <AddMember show={show} hideAddMember={hideAddMember} groupID={props.match.params.id} memberUsernames={userGroups[props.match.params.id].members.map((item)=>item.username)}/>
-
-                    </div>:
-                    null}
-                </div>
+                <h3>Periods</h3>
 
                 {userGroups[props.match.params.id].is_admin ?
                     <div>
@@ -90,8 +91,6 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
 
                     null }
 
-                <div>
-                <h3>Periods</h3>
                 {userGroups[props.match.params.id].periods.map((item, index)=>{
                     if(item){
                          return <div key={index}><SinglePeriodRow period_info={item} is_admin={userGroups[props.match.params.id].is_admin}/></div>
@@ -104,6 +103,18 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
                 <div>
 
                 <h3>Members</h3>
+
+                <div>
+
+                    {userGroups[props.match.params.id].is_admin ?
+                        <div>
+                        <div onClick={showAddMember}>Add member</div>
+                    <AddMember show={show} hideAddMember={hideAddMember} groupID={props.match.params.id} memberUsernames={userGroups[props.match.params.id].members.map((item)=>item.username)}/>
+
+                    </div>:
+                    null}
+                </div>
+
                 {userGroups[props.match.params.id].members.map((item, index)=>{
                     if(item){
                          return <div key={index}><SingleMember username={item.username} userID={item.id} userIsAdmin={userGroups[props.match.params.id].admins.filter(adminItem=>adminItem.id===item.id)} isAdmin={userGroups[props.match.params.id].is_admin} groupID={props.match.params.id} /></div>
@@ -113,13 +124,6 @@ const SingleGroup = ({ userGroups, deleteGroup, ...props }) => {
 
 
                 })}
-                </div>
-
-                <div style={{height: 700, width: '80%'}}>
-                    <Calendar
-                        localizer={someLocalizer}
-                        events={events}
-                    />
                 </div>
 
         </div>

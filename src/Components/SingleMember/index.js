@@ -6,7 +6,7 @@ import { updateGroup } from '../../redux/action-creators'
 
 
 
-function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateGroup }) {
+function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateGroup, loggedInUserID }) {
 
     function removeMemberFromGroup(){
         let requestBody = {
@@ -19,13 +19,17 @@ function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateG
         updateGroup(token, requestBody)
     }
 
-
+    let showRemoveButton = isAdmin && loggedInUserID!==userID
 
     return (<div>
                 <div>{username}</div>
-                {isAdmin? <button type="button" onClick={removeMemberFromGroup}>Remove from group</button> : null}
+                {showRemoveButton ? <button type="button" onClick={removeMemberFromGroup}>Remove from group</button> : null}
             </div>)
 
 }
 
-export default connect(null, {updateGroup})(SingleMember)
+const mapStateToProps = (state)=>({
+    loggedInUserID: state.authActions.userID
+})
+
+export default connect(mapStateToProps, {updateGroup})(SingleMember)

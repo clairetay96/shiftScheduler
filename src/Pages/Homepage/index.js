@@ -34,7 +34,7 @@ const Homepage = ({ loggedIn, userShifts })=>{
             return (<div>
                     <h2>Your Shifts</h2>
 
-                    <div style={{height: 700, width: '80%'}}>
+                    <div style={{height: 550, width: '80%', margin: '15px 0'}}>
                     <Calendar
                         localizer={someLocalizer}
                         events={events}

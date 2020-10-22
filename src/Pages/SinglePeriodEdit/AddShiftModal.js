@@ -9,6 +9,7 @@ function AddShiftModal({show, onHideFunction, addShiftFunction, period_id, group
     let [workers_required, setWorkersRequired] = useState("")
     let [workers, setWorkers] = useState([])
 
+
     let addShiftSubmit = () => {
         let newVals = {
             shift_start,
@@ -34,7 +35,8 @@ function AddShiftModal({show, onHideFunction, addShiftFunction, period_id, group
 
     }
 
-    return (<Modal show={show} onHide={onHideFunction}>
+    if (groupMembers){
+        return (<Modal show={show} onHide={onHideFunction}>
                 <Modal.Header closeButton>
                     <h3>Add Shift</h3>
                 </Modal.Header>
@@ -56,6 +58,11 @@ function AddShiftModal({show, onHideFunction, addShiftFunction, period_id, group
 
                 </Modal.Body>
             </Modal>)
+        } else {
+            return "Loading..."
+        }
+
+
 }
 
 export default AddShiftModal

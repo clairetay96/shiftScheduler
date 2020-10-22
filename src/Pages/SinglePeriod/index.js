@@ -44,7 +44,7 @@ function SinglePeriod({userGroups, userShifts, addPreference, userID, ...props})
 
 
 
-    }, [userGroups])
+    }, [userGroups, props.match.params.id])
 
     function submitShiftPreferenceHandler(event) {
         event.preventDefault()

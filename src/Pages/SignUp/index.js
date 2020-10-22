@@ -1,7 +1,8 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { signUpAPI } from '../../redux/action-creators'
+import './index.css'
 
 
 const SignUpPage = ({ loggedIn, signUpAPI }) => {
@@ -25,17 +26,14 @@ const SignUpPage = ({ loggedIn, signUpAPI }) => {
 
 
     return <div>
-                Sign up
+                <h3>Sign up</h3>
+                <div>Already have an account? <Link to="/login">Log in</Link>.</div>
                 <div>
-                    <form onSubmit={onSubmitHandler}>
-                        Email:
-                        <input type="text" name="Email"/>
-                        Username:
-                        <input type="text" name="Username"/>
-                        Password:
-                        <input type="text" name="Password1"/>
-                        Confirm Password:
-                        <input type="text" name="Password2"/>
+                    <form onSubmit={onSubmitHandler} className="signup-form">
+                        <input type="text" name="Email" placeholder="Email"/>
+                        <input type="text" name="Username" placeholder="Username"/>
+                        <input type="password" name="Password1" placeholder="Password"/>
+                        <input type="password" name="Password2" placeholder="Confirm password"/>
                         <input type="submit" />
                     </form>
                 </div>

@@ -510,9 +510,14 @@ export const logInAPI = (requestBody) => {
                     getUserGroups()(dispatch)
                     getUserShifts()(dispatch)
 
+                    return true
+
                 } else {
                     console.log(logInReq.statusText, logInReq.status, logInReq)
+
+                    return false
                 }
+
 
         } catch (err) {
             console.log(err, "error in logInAPI")
