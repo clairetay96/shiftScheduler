@@ -7,7 +7,7 @@ import './index.css'
 
 
 
-function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateGroup, loggedInUserID }) {
+function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateGroup, loggedInUsername }) {
 
     function removeMemberFromGroup(){
         let requestBody = {
@@ -20,7 +20,7 @@ function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateG
         updateGroup(token, requestBody)
     }
 
-    let showRemoveButton = isAdmin && loggedInUserID!==userID
+    let showRemoveButton = isAdmin && loggedInUsername!==username
 
     return (<div className="member-row">
                 <div>{username}</div>
@@ -30,7 +30,7 @@ function SingleMember({ userID, username, userIsAdmin, isAdmin, groupID, updateG
 }
 
 const mapStateToProps = (state)=>({
-    loggedInUserID: state.authActions.userID
+    loggedInUsername: state.authActions.username
 })
 
 export default connect(mapStateToProps, {updateGroup})(SingleMember)
