@@ -17,6 +17,8 @@ function NavBar({ loggedIn, logOutAPI, username, userID, userGroups }){
     const logout = () => {
 
         //clears cookies and should also blacklist jwt
+        localStorage.clear()
+
         logOutAPI()
             .then(res => {
                 history.push("/")

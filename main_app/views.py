@@ -322,17 +322,6 @@ def logout(request):
 	response.delete_cookie('csrftoken')
 	return response
 
-#runs everytime the app loads/is refreshed - checks if there's still a session going on
-def on_app_open_validate(request):
-	if request.session.session_key:
-		userCred = {
-		'username': request.user.username,
-		'id': request.user.id,
-		'loggedIn': True
-		}
-		return JsonResponse(userCred)
-	return JsonResponse({'loggedIn': False})
-
 
 def find_user(request, user_input):
 	response =[model_to_dict(i) for i in User.objects.filter(username__contains=user_input)]

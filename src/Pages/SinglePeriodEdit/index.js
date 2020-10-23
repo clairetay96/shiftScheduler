@@ -213,8 +213,9 @@ function SinglePeriodEdit({ userGroups, deletePeriod, updatePeriod, ...props }){
     function shiftDeleteHandler(index){
         let shiftToDelete = period.shift_set[index]
 
+
         if(shiftToDelete.id!==undefined){
-            console.log(shiftToDelete)
+
             setDeletedShifts(prevState => [...prevState, shiftToDelete])
         }
 

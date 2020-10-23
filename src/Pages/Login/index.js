@@ -21,6 +21,9 @@ const LogInPage = ({ logInAPI }) => {
         logInAPI(requestBody)
             .then(res => {
                 if(res){
+                    localStorage.setItem('userID', res.user.id)
+                    localStorage.setItem('username', res.user.username)
+                    localStorage.setItem('loggedIn', true)
                  history.push("/")
                 } else {
                     setMessage("Invalid login credentials.")

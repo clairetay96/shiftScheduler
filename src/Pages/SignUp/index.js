@@ -22,6 +22,10 @@ const SignUpPage = ({ loggedIn, signUpAPI }) => {
             .then(res => {
                 if(res){
                     history.push("/")
+                    console.log(res)
+                    localStorage.setItem('userID', res.user.id)
+                    localStorage.setItem('username', res.user.username)
+                    localStorage.setItem('loggedIn', true)
                 } else {
                     setMessage("Invalid input. Please try again.")
                 }

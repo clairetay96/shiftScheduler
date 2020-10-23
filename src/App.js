@@ -20,8 +20,12 @@ function App({openAppValidate}) {
     //populate redux store accordingly.
 
     useEffect(()=>{
-        console.log("..validating user")
-        openAppValidate()
+
+        let id = localStorage.getItem('userID')
+        let username = localStorage.getItem('username')
+        let loggedIn = localStorage.getItem('loggedIn')
+        openAppValidate({id, username, loggedIn})
+
     }, [])
 
 

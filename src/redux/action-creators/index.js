@@ -123,21 +123,10 @@ export const getUserShifts = () => {
 }
 
 
-export const openAppValidate = () => {
-    return async (dispatch) => {
-        let validateURL = "/api/on-app-open-validate"
-        let validity = await fetch(validateURL)
-            .then(res => {
-                console.log(res)
-                return res.json()})
-            .then(res => {
-                console.log(res)
-                return res
-            })
-
-        if(validity.loggedIn){
-            console.log(validity)
-            dispatch(logIn(validity))
+export const openAppValidate = (userInformation) => {
+    return (dispatch) => {
+        if(userInformation.loggedIn){
+            dispatch(logIn(userInformation))
             getUserGroups()(dispatch)
             getUserShifts()(dispatch)
         } else {
@@ -334,7 +323,7 @@ export const updatePeriod = (token, periodEdit, shiftEdit, shiftDel, shiftAdd) =
                     }
                 }
 
-                let requestURL = `/api/shifts/${item.id}/`
+                let requestURL = `/api/shifts/${item}/`
 
                 let delShiftReq = fetch(requestURL, shiftReqOptions)
                 shiftUpdates.push(delShiftReq)
@@ -522,7 +511,7 @@ export const logInAPI = (requestBody) => {
                     getUserGroups()(dispatch)
                     getUserShifts()(dispatch)
 
-                    return true
+                    return userCred
 
                 } else {
                     console.log(logInReq.statusText, logInReq.status, logInReq)

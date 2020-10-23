@@ -11,7 +11,6 @@ from . import views
 urlpatterns = [
 	path('groups/<int:id>/', views.WorkGroupViewWrite.as_view()),
 	path('groups/', views.WorkGroupView.as_view()),
-	path('on-app-open-validate/', views.on_app_open_validate),
 	path('find-user/<str:user_input>/', views.find_user),
 	path('groups/<int:group_id>/periods/', views.PeriodView.as_view()),
 	path('periods/<int:id>/', views.PeriodViewWrite.as_view()),
