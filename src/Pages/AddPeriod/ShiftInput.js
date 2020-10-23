@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
+import moment from 'moment'
 
 import './index.css'
 
@@ -54,7 +55,7 @@ function ShiftInput({ shift_info, onChangeHandler, customKey, removeShiftHandler
 
     let RepeatModal = (<Modal size="md" show={show} onHide={hideModal}>
                             <Modal.Header closeButton>
-                            <Modal.Title>Repeat Shift {shift_info.shift_start} to {shift_info.shift_end}</Modal.Title>
+                            <Modal.Title>Repeat Shift {moment(shift_info.shift_start).format("HH:mm")} to {moment(shift_info.shift_end).format("HH:mm")}</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 Repeat...

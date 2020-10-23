@@ -83,7 +83,7 @@ function Groups({ loggedIn, userGroups, getUserGroups }){
                         <div className="groups-page-header">
                         <h3>Your Groups</h3>
                         <AddGroup show={show} hideAddGroup={hideAddGroup}/>
-                        <div onClick={showAddGroup} className="add-group"><BiPlus size={25}/></div>
+                        {loggedIn && <div onClick={showAddGroup} className="add-group"><BiPlus size={25}/></div>}
                         </div>
 
                         <div className="groups-list">
