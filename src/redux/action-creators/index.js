@@ -127,9 +127,16 @@ export const openAppValidate = () => {
     return async (dispatch) => {
         let validateURL = "/api/on-app-open-validate"
         let validity = await fetch(validateURL)
-            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                return res.json()})
+            .then(res => {
+                console.log(res)
+                return res
+            })
 
         if(validity.loggedIn){
+            console.log(validity)
             dispatch(logIn(validity))
             getUserGroups()(dispatch)
             getUserShifts()(dispatch)

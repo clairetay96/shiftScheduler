@@ -327,7 +327,7 @@ def on_app_open_validate(request):
 	if request.session.session_key:
 		userCred = {
 		'username': request.user.username,
-		'userID': request.user.id,
+		'id': request.user.id,
 		'loggedIn': True
 		}
 		return JsonResponse(userCred)

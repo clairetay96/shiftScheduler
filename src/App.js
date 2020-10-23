@@ -20,6 +20,7 @@ function App({openAppValidate}) {
     //populate redux store accordingly.
 
     useEffect(()=>{
+        console.log("..validating user")
         openAppValidate()
     }, [])
 

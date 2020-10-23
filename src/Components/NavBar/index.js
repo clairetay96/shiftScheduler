@@ -56,7 +56,8 @@ function NavBar({ loggedIn, logOutAPI, username, userID, userGroups }){
 
         }
 
-    }, [userGroups])
+
+    }, [userGroups, loggedIn])
 
 
 
@@ -82,6 +83,7 @@ function NavBar({ loggedIn, logOutAPI, username, userID, userGroups }){
 
                 </div>)
     }
+    console.log(userGroups, loggedIn)
     return (<div className="nav-bar nav-logged-out">
                 <div className="homepage-link">
                 <Link to="/"><div className="shift-logo">DELEGO</div></Link>

@@ -11,7 +11,7 @@ const authActions = (
             return {
                 ...state,
                 username: action.userCred.username,
-                userID: action.userCred.userID,
+                userID: action.userCred.id,
                 loggedIn: true}
         case "LOG_OUT":
             return {
