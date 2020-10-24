@@ -50,7 +50,7 @@ python manage.py migrate main_app
 ```
 
 
-5. At this state you may want to create an admin account (still in pipenv shell):
+5. At this stage you may want to create an admin account (still in pipenv shell):
 ```
 python manage.py createsuperuser
 ```
