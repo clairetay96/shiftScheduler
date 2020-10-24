@@ -118,11 +118,11 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'shift_schedule',
-    }
-    # 'default': dj_database_url.config(conn_max_age=600)
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': 'shift_schedule',
+    # }
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
 SESSION_ENGINE= 'django.contrib.sessions.backends.cached_db'

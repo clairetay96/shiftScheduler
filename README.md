@@ -74,14 +74,12 @@ The app should be accessible at localhost:3000.
 * Django rest_auth
 * Django rest_auth with jwt
 * Django all_auth
-
 * React
 * create-react-app
 * react-router-dom
 * react-bootstrap
 * react-big-calendar
 * react-bootstrap-typeahead
-
 * Redux
 * redux-thunk
 
