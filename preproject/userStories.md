@@ -1,12 +1,12 @@
-#User Stories
+## User Stories
 
-## Kyle, 24, Medical Officer at ER
+### Kyle, 24, Medical Officer at ER
 * In charge of assigning shifts 
 * Wants to keep everyone as happy as possible
 * Time is precious
 
 
-##Julie, 22, Waitress
+### Julie, 22, Waitress
 * Just started working part time at multiple places
 * Different workplaces have different methods for conveying shift preferences
 

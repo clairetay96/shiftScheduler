@@ -68,8 +68,7 @@ function assignShifts(members, userPreferences, shiftSet) {
                 })
 
                 while(shifts[item].users.length < shifts[item].workers_required && seen.length > 0){
-                    shifts[item].users.push(seen[0].user_id)
-                    seen.splice(0, 1)
+                    shifts[item].users.push(seen.pop())
 
                 }
             }
