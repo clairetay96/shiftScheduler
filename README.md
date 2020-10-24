@@ -87,7 +87,7 @@ The app should be accessible at localhost:3000.
 
 * Form validation
 * Implementing error boundary
-* More specific error messaged (username taken, no permission etc)
+* More specific error messages (username taken, no permission etc)
 * Allow users to leave groups - currently only group admins can remove a member from a group
 * Allow users to access preferences from home page
 * When submitting shift preferences, notify user when shifts from different groups clash
